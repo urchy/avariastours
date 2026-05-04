@@ -1,1943 +1,1221 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Portal — Delivery Roadmap · Connells Group</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --navy: #0b2545;
-      --navy-mid: #1a3a6e;
-      --teal: #1d6fa4;
-      --gold: #c8961e;
-      --gold-light: #f5d98a;
-      --green: #1e8a55;
-      --green-bg: #d4edda;
-      --green-text: #145c38;
-      --orange: #d97706;
-      --orange-bg: #fef3c7;
-      --orange-text: #92400e;
-      --blue-bg: #dbeafe;
-      --blue-text: #1e40af;
-      --red: #dc2626;
-      --red-bg: #fee2e2;
-      --red-text: #991b1b;
-      --white: #ffffff;
-      --page-bg: #f1f5f9;
-      --border: #e2e8f0;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --label-w: 168px;
-      --font: 'Plus Jakarta Sans', sans-serif;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: var(--font);
-      background: var(--page-bg);
-      color: var(--text);
-      padding: 28px 24px;
-      min-width: 1100px;
-    }
-
-    /* ─── PAGE WRAPPER ──────────────────────────────────────── */
-    .page {
-      background: var(--white);
-      border-radius: 10px;
-      box-shadow: 0 4px 24px rgba(11,37,69,.10);
-      padding: 36px 40px 40px;
-      max-width: 1460px;
-      margin: 0 auto;
-    }
-
-    /* ─── HEADER ────────────────────────────────────────────── */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding-bottom: 20px;
-      border-bottom: 3px solid var(--navy);
-      margin-bottom: 22px;
-    }
-
-    .header-left h1 {
-      font-size: 19px;
-      font-weight: 800;
-      color: var(--navy);
-      letter-spacing: -0.3px;
-    }
-
-    .header-left .subtitle {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 3px;
-      font-weight: 400;
-    }
-
-    .header-left .subtitle strong {
-      color: var(--gold);
-      font-weight: 700;
-    }
-
-    .legend {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      flex-wrap: wrap;
-      padding-top: 2px;
-    }
-
-    .leg {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 10.5px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .leg-swatch {
-      width: 13px; height: 13px;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-
-    .leg-today {
-      width: 2px; height: 14px;
-      background: var(--red);
-      border-radius: 1px;
-      flex-shrink: 0;
-    }
-
-    /* ─── PHASE BANNERS ─────────────────────────────────────── */
-    .phase-row {
-      display: flex;
-      margin-left: var(--label-w);
-      margin-bottom: 0;
-      gap: 2px;
-    }
-
-    .phase-banner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 7px 6px 5px;
-      border-radius: 5px 5px 0 0;
-      flex-shrink: 0;
-      text-align: center;
-      line-height: 1.3;
-    }
-
-    .phase-banner .ph-title {
-      font-size: 9.5px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      white-space: nowrap;
-    }
-
-    .phase-banner .ph-dates {
-      font-size: 9px;
-      font-weight: 500;
-      margin-top: 1px;
-      opacity: 0.85;
-      white-space: nowrap;
-    }
-
-    .ph-init  { background: #0b2545; color: #f5d98a; }
-    .ph-m1    { background: #1a5c9a; color: #dbeafe; }
-    .ph-m2    { background: #065f46; color: #d1fae5; }
-    .ph-m3    { background: #4c1d95; color: #ede9fe; }
-
-    /* ─── GANTT WRAPPER ─────────────────────────────────────── */
-    .gantt-wrap {
-      position: relative;
-    }
-
-    /* Month header */
-    .gantt-months {
-      display: flex;
-      margin-left: var(--label-w);
-      border-bottom: 2px solid var(--border);
-    }
-
-    .mcell {
-      flex: 1;
-      text-align: center;
-      font-size: 9.5px;
-      font-weight: 700;
-      color: var(--text-muted);
-      padding: 5px 0 4px;
-      border-right: 1px solid #f0f4f8;
-      letter-spacing: 0.2px;
-    }
-
-    .mcell:last-child { border-right: none; }
-    .mcell.cur { color: var(--red); background: #fff5f5; }
-
-    /* today label above month grid */
-    .today-marker-label {
-      position: absolute;
-      top: 0;
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--red);
-      transform: translateX(-50%);
-      white-space: nowrap;
-      z-index: 20;
-      letter-spacing: 0.2px;
-    }
-
-    /* Rows */
-    .g-row {
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #f1f5f9;
-      min-height: 30px;
-      position: relative;
-    }
-
-    .g-row:hover { background: #fafcff; }
-
-    .g-label {
-      width: var(--label-w);
-      min-width: var(--label-w);
-      padding: 4px 14px 4px 0;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.35;
-    }
-
-    .g-label .lsub {
-      font-size: 9.5px;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-
-    /* The bars area */
-    .g-bars {
-      flex: 1;
-      position: relative;
-      height: 30px;
-    }
-
-    /* Column grid lines */
-    .g-bars::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        to right,
-        transparent,
-        transparent calc(7.692% - 1px),
-        #f1f5f9 calc(7.692% - 1px),
-        #f1f5f9 7.692%
-      );
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Today line in bars area */
-    .g-today {
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 2px;
-      background: var(--red);
-      z-index: 5;
-      left: 28.3%;
-    }
-
-    /* Bar base */
-    .bar {
-      position: absolute;
-      height: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      padding: 0 7px;
-      font-size: 9px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      z-index: 2;
-      letter-spacing: 0.1px;
-    }
-
-    .bar-done     { background: #16a34a; color: #fff; }
-    .bar-prog     { background: #d97706; color: #fff; }
-    .bar-plan     { background: #bfdbfe; color: #1e40af; border: 1px solid #93c5fd; }
-    .bar-prog-h   { height: 16px; }
-
-    /* Programme bar */
-    .bar-programme {
-      background: linear-gradient(90deg, var(--navy) 0%, #1d6fa4 100%);
-      color: #f5d98a;
-      font-size: 9.5px;
-      font-weight: 700;
-      height: 18px;
-    }
-
-    /* Section header rows */
-    .g-sec {
-      display: flex;
-      align-items: center;
-      margin-top: 6px;
-    }
-
-    .g-sec-label {
-      width: var(--label-w);
-      min-width: var(--label-w);
-      font-size: 9.5px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      padding: 5px 14px 5px 8px;
-      border-radius: 4px 0 0 4px;
-      color: #fff;
-      line-height: 1.3;
-    }
-
-    .g-sec-stripe {
-      flex: 1;
-      height: 26px;
-      border-radius: 0 4px 4px 0;
-      display: flex;
-      align-items: center;
-      position: relative;
-    }
-
-    .g-sec-stripe::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        to right,
-        transparent,
-        transparent calc(7.692% - 1px),
-        rgba(255,255,255,.15) calc(7.692% - 1px),
-        rgba(255,255,255,.15) 7.692%
-      );
-    }
-
-    .sec-dates {
-      position: absolute;
-      right: 8px;
-      font-size: 9px;
-      font-weight: 600;
-      opacity: 0.75;
-    }
-
-    .sec-init { background: #0b2545; }
-    .sec-m1   { background: #1a5c9a; }
-    .sec-m2   { background: #065f46; }
-    .sec-m3   { background: #4c1d95; }
-
-    .sec-init .g-sec-label { background: #0b2545; }
-    .sec-m1   .g-sec-label { background: #1a5c9a; }
-    .sec-m2   .g-sec-label { background: #065f46; }
-    .sec-m3   .g-sec-label { background: #4c1d95; }
-
-    /* ─── DETAIL TABLE ──────────────────────────────────────── */
-    .section-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 3px;
-      margin-top: 32px;
-    }
-
-    .section-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
-
-    table.detail {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-    }
-
-    table.detail thead th {
-      background: var(--navy);
-      color: #fff;
-      padding: 8px 12px;
-      text-align: left;
-      font-size: 9.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-    }
-
-    table.detail thead th:first-child { border-radius: 4px 0 0 0; }
-    table.detail thead th:last-child  { border-radius: 0 4px 0 0; }
-
-    table.detail tbody tr { border-bottom: 1px solid #f0f4f8; }
-    table.detail tbody tr:hover { background: #fafcff; }
-    table.detail tbody td { padding: 7px 12px; vertical-align: middle; color: var(--text); }
-
-    .mile-row td {
-      background: #f8fafc;
-      color: var(--navy);
-      font-weight: 700;
-      font-size: 10.5px;
-      border-top: 2px solid var(--border) !important;
-      padding: 8px 12px;
-    }
-
-    .mile-dot {
-      display: inline-block;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 2px 9px;
-      border-radius: 20px;
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
-
-    .b-done { background: var(--green-bg); color: var(--green-text); }
-    .b-prog { background: var(--orange-bg); color: var(--orange-text); }
-    .b-plan { background: var(--blue-bg); color: var(--blue-text); }
-    .b-risk { background: var(--red-bg); color: var(--red-text); }
-
-    .note-small { font-size: 10px; color: var(--text-muted); font-style: italic; }
-
-    /* ─── RISK TABLE ────────────────────────────────────────── */
-    .risk-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 32px;
-    }
-
-    .risk-card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .risk-card-title {
-      background: var(--navy);
-      color: #f5d98a;
-      font-size: 10.5px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 8px 14px;
-    }
-
-    table.risk-tbl {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-    }
-
-    table.risk-tbl th {
-      background: #f8fafc;
-      color: var(--text-muted);
-      font-size: 9.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      padding: 6px 12px;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-    }
-
-    table.risk-tbl td { padding: 7px 12px; border-bottom: 1px solid #f1f5f9; color: var(--text); }
-    table.risk-tbl tr:last-child td { border-bottom: none; }
-
-    .impact-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px; height: 20px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .impact-high { background: #fee2e2; color: #dc2626; }
-
-    /* Sprint ramp-up */
-    .sprint-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-top: 6px;
-    }
-
-    .sprint-chip {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border-radius: 6px;
-      padding: 5px 10px;
-      min-width: 80px;
-    }
-
-    .sprint-chip .sc-name { font-size: 10px; font-weight: 800; }
-    .sprint-chip .sc-status { font-size: 9px; font-weight: 500; margin-top: 1px; }
-
-    .sc-done { background: #dcfce7; color: #166534; }
-    .sc-prog { background: #fef3c7; color: #92400e; }
-    .sc-next { background: #dbeafe; color: #1e40af; }
-
-    /* ─── FOOTER ────────────────────────────────────────────── */
-    .footer {
-      margin-top: 28px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer span {
-      font-size: 9.5px;
-      color: #94a3b8;
-    }
-
-    .footer .conf {
-      background: var(--navy);
-      color: #f5d98a;
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-    }
-
-    /* ─── QA / SIGNOFF / PROD pipeline bars ────────────────────── */
-    .bar-qa     { background: #7c3aed; color: #fff; }
-    .bar-signoff{ background: #0891b2; color: #fff; }
-    .bar-prod   { background: #15803d; color: #fff; }
-
-    /* ─── Environment Promotion Pipeline Table ──────────────────── */
-    .pipeline-wrap { margin-top: 36px; }
-
-    .pipeline-stages {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 3px;
-      margin-bottom: 0;
-    }
-
-    .ps-box {
-      padding: 10px 14px 8px;
-      border-radius: 6px 6px 0 0;
-      text-align: center;
-    }
-
-    .ps-box .ps-title { font-size: 13px; font-weight: 800; }
-    .ps-box .ps-sub   { font-size: 9.5px; font-weight: 400; margin-top: 3px; opacity: 0.85; }
-
-    .ps-dev     { background: #1e40af; color: #fff; }
-    .ps-qa      { background: #7c3aed; color: #fff; }
-    .ps-signoff { background: #0891b2; color: #fff; }
-    .ps-prod    { background: #15803d; color: #fff; }
-
-    table.pipeline {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-      border: 1px solid var(--border);
-    }
-
-    table.pipeline thead th {
-      padding: 7px 12px;
-      text-align: left;
-      font-size: 9.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-right: 1px solid rgba(255,255,255,.2);
-      white-space: nowrap;
-    }
-
-    table.pipeline thead tr.th-dev    th { background: #1e40af; color: #fff; }
-    table.pipeline thead tr.th-qa     th { background: #7c3aed; color: #fff; }
-    table.pipeline thead tr.th-sign   th { background: #0891b2; color: #fff; }
-    table.pipeline thead tr.th-prod   th { background: #15803d; color: #fff; }
-    table.pipeline thead tr.th-labels th { background: var(--navy); color: #fff; }
-
-    table.pipeline tbody tr { border-bottom: 1px solid #f0f4f8; }
-    table.pipeline tbody tr:hover { background: #fafcff; }
-    table.pipeline tbody td {
-      padding: 7px 12px;
-      vertical-align: middle;
-      border-right: 1px solid #f0f4f8;
-    }
-
-    table.pipeline tbody tr.pipe-mile td {
-      background: #f8fafc;
-      font-weight: 700;
-      font-size: 10px;
-      color: var(--navy);
-      border-top: 2px solid var(--border);
-      padding: 6px 12px;
-    }
-
-    .pipe-date { font-size: 10.5px; color: var(--text); font-weight: 500; }
-    .pipe-tbc  { font-size: 10px; color: var(--text-muted); font-style: italic; }
-
-
-    /* ─── Pipeline chips (coloured cells) ──────────────────────── */
-    .chip {
-      display: inline-block;
-      padding: 3px 9px;
-      border-radius: 4px;
-      font-size: 9.5px;
-      font-weight: 700;
-      white-space: nowrap;
-      letter-spacing: 0.1px;
-    }
-    .chip-dev     { background: #1e40af; color: #fff; }
-    .chip-qa      { background: #7c3aed; color: #fff; }
-    .chip-signoff { background: #0891b2; color: #fff; }
-    .chip-prod    { background: #15803d; color: #fff; }
-    .chip-tbc     { background: #e2e8f0; color: #64748b; font-style: italic; font-weight: 500; }
-    .chip-blocked { background: #fee2e2; color: #991b1b; }
-
-    /* ─── Sub-group header inside pipeline table ────────────────── */
-    tr.sub-group-hdr td {
-      background: #eff6ff !important;
-      font-size: 10px;
-      font-weight: 700;
-      color: #1a5c9a;
-      padding: 5px 12px 5px 20px !important;
-      border-left: 3px solid #1a5c9a;
-      border-top: 1px solid #bfdbfe !important;
-    }
-    tr.sub-row td:first-child {
-      padding-left: 28px !important;
-      font-style: italic;
-      color: var(--text-muted);
-    }
-    tr.sub-row td { font-size: 10.5px; }
-
-    /* ─── Pipeline legend ───────────────────────────────────────── */
-    .pipeline-legend {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      padding: 10px 14px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-top: none;
-      border-radius: 0 0 6px 6px;
-    }
-    .pl-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .pl-swatch {
-      width: 16px; height: 12px;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-
-    /* ─── Pipeline flow header (arrows) ────────────────────────── */
-    .pipe-flow {
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      margin-top: 14px;
-      margin-bottom: 0;
-      border-radius: 6px 6px 0 0;
-      overflow: hidden;
-    }
-    .pf-stage {
-      flex: 1;
-      padding: 9px 12px 7px;
-      text-align: center;
-      position: relative;
-    }
-    .pf-stage .pf-title { font-size: 11px; font-weight: 800; line-height: 1.2; }
-    .pf-stage .pf-sub   { font-size: 8.5px; font-weight: 400; margin-top: 2px; opacity: 0.85; }
-    .pf-dev     { background: #1e40af; color: #fff; }
-    .pf-qa      { background: #7c3aed; color: #fff; }
-    .pf-signoff { background: #0891b2; color: #fff; }
-    .pf-prod    { background: #15803d; color: #fff; }
-    .pf-arrow {
-      display: flex; align-items: center; justify-content: center;
-      background: #f1f5f9;
-      padding: 0 4px;
-      font-size: 14px;
-      color: #94a3b8;
-      font-weight: 700;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mirandela aos Pirenéus — Rota de Mota</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ───────────────────────────────── */
+:root {
+  --clay:    #2C2318;
+  --earth:   #3D3020;
+  --khaki:   #6B5D47;
+  --sand:    #C8B89A;
+  --cream:   #F4EFE6;
+  --parch:   #FAF6EF;
+  --white:   #FDFCFA;
+  --accent:  #A0522D;   /* burnt sienna */
+  --accent2: #D4843A;   /* amber */
+  --sky:     #5B7FA6;
+  --forest:  #3A5C3A;
+  --stone:   #9A8E80;
+  --rule:    rgba(44,35,24,0.12);
+}
+
+/* ─── RESET ────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
+html { scroll-behavior:smooth; font-size:16px }
+body {
+  background: var(--parch);
+  color: var(--clay);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display:block; max-width:100% }
+a { text-decoration:none; color:inherit }
+
+/* ─── TYPOGRAPHY ───────────────────────────── */
+.display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.serif { font-family: 'Cormorant Garamond', Georgia, serif }
+.eyebrow {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ─── NAV ──────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 1.4rem 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(40,30,18,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(200,184,154,0.08);
+}
+.nav-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--sand);
+  letter-spacing: 0.06em;
+}
+.nav-brand span { color: var(--accent2); font-style: italic }
+.nav-links {
+  display: flex;
+  gap: 2.2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(200,184,154,0.6);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--sand) }
+
+/* ─── HERO ──────────────────────────────────── */
+.hero {
+  height: 100vh;
+  min-height: 600px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.hero-img {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(20,14,8,0.25) 0%,
+      rgba(20,14,8,0.05) 30%,
+      rgba(20,14,8,0.55) 70%,
+      rgba(20,14,8,0.90) 100%),
+    url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Col_du_Tourmalet_-_route.jpg/1280px-Col_du_Tourmalet_-_route.jpg')
+    center center / cover no-repeat;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 5% 5rem;
+  max-width: 1300px;
+  width: 100%;
+}
+.hero-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 36px;
+  height: 1px;
+  background: var(--accent2);
+}
+.hero-h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.8rem, 9vw, 8.5rem);
+  font-weight: 300;
+  line-height: 0.93;
+  color: #F4EFE6;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+}
+.hero-h1 em {
+  font-style: italic;
+  color: var(--accent2);
+}
+.hero-meta {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(200,184,154,0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  width: fit-content;
+}
+.hero-meta-item {
+  padding: 0.75rem 1.5rem;
+  border-right: 1px solid rgba(200,184,154,0.2);
+  text-align: center;
+}
+.hero-meta-item:last-child { border-right: none }
+.hero-meta-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1;
+}
+.hero-meta-lbl {
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(200,184,154,0.5);
+  margin-top: 0.25rem;
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 5%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.hero-scroll span {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(200,184,154,0.45);
+  writing-mode: vertical-rl;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(200,184,154,0.4), transparent);
+}
+
+/* ─── SECTION SHELL ─────────────────────────── */
+.section { padding: 6rem 5% }
+.section-inner { max-width: 1200px; margin: 0 auto }
+.section-header { margin-bottom: 4rem }
+.section-header .eyebrow { margin-bottom: 1rem }
+.section-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* ─── MAP ───────────────────────────────────── */
+.map-section {
+  background: var(--clay);
+  padding: 0;
+}
+.map-header {
+  padding: 4rem 5% 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.map-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 300;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+}
+.map-header h2 em { font-style:italic; color:var(--accent2) }
+.route-stats {
+  display: flex;
+  gap: 2.5rem;
+}
+.r-stat {}
+.r-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--accent2);
+  line-height: 1;
+}
+.r-stat-lbl {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-top: 0.2rem;
+}
+.map-embed {
+  width: 100%;
+  height: 480px;
+  position: relative;
+}
+.map-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  opacity: 0.9;
+}
+
+/* ─── ITINERARY ─────────────────────────────── */
+.itinerary-section {
+  background: var(--white);
+}
+
+/* day layout alternates */
+.day-entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 480px;
+  border-bottom: 1px solid var(--rule);
+}
+.day-entry:last-child { border-bottom: none }
+.day-entry.reverse { direction: rtl }
+.day-entry.reverse > * { direction: ltr }
+
+.day-photo {
+  position: relative;
+  overflow: hidden;
+  background: var(--earth);
+}
+.day-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  transition: transform 0.8s ease, opacity 0.4s ease;
+}
+.day-entry:hover .day-photo img {
+  transform: scale(1.03);
+  opacity: 1;
+}
+.day-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(44,35,24,0.35) 0%,
+    rgba(44,35,24,0.0) 60%);
+  pointer-events: none;
+}
+.day-photo-number {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: rgba(244,239,230,0.9);
+  background: rgba(44,35,24,0.55);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(244,239,230,0.15);
+  padding: 0.35rem 0.8rem;
+  border-radius: 1px;
+}
+.day-photo-location {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(244,239,230,0.65);
+}
+
+.day-text {
+  padding: 3.5rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--white);
+}
+.day-weekday {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.day-distance {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: var(--stone);
+  letter-spacing: 0.08em;
+  margin-bottom: 1.25rem;
+}
+.day-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--clay);
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+.day-desc {
+  font-size: 0.96rem;
+  line-height: 1.82;
+  color: var(--khaki);
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+.day-desc strong {
+  font-weight: 600;
+  color: var(--clay);
+}
+.day-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: 1px;
+  border: 1px solid;
+}
+.tag-road { color: var(--accent); border-color: rgba(160,82,45,0.3); background: rgba(160,82,45,0.05) }
+.tag-mtn  { color: var(--sky);    border-color: rgba(91,127,166,0.3); background: rgba(91,127,166,0.05) }
+.tag-city { color: var(--forest); border-color: rgba(58,92,58,0.3);   background: rgba(58,92,58,0.05) }
+.tag-fuel { color: #7A6010;       border-color: rgba(122,96,16,0.3);  background: rgba(122,96,16,0.05) }
+.tag-epic { background: var(--accent); color: white; border-color: var(--accent) }
+
+/* ─── EDITORIAL BREAK ───────────────────────── */
+.editorial-break {
+  height: 60vh;
+  min-height: 360px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.editorial-break-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.editorial-break-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20,14,8,0.62);
+}
+.editorial-break-text {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 5%;
+}
+.editorial-break-text .eyebrow { color: var(--accent2); margin-bottom: 1.2rem }
+.editorial-break-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 300;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.editorial-break-text h3 em { font-style:italic; color:var(--accent2) }
+
+/* ─── HOTELS ────────────────────────────────── */
+.hotels-section { background: var(--cream) }
+.hotel-location {
+  margin-bottom: 4rem;
+}
+.hotel-location:last-child { margin-bottom: 0 }
+.hotel-location-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+.hotel-location-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--clay);
+}
+.hotel-location-night {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.hotels-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.hotel-card {
+  background: var(--white);
+  border: 1px solid rgba(44,35,24,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.hotel-card:hover {
+  box-shadow: 0 8px 32px rgba(44,35,24,0.1);
+  transform: translateY(-3px);
+}
+.hotel-card-accent { height: 3px }
+.hotel-card-body { padding: 1.5rem }
+.hotel-tier {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 0.4rem;
+}
+.hotel-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--clay);
+  margin-bottom: 0.6rem;
+  line-height: 1.2;
+}
+.hotel-desc {
+  font-size: 0.87rem;
+  line-height: 1.68;
+  color: var(--khaki);
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+.hotel-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+.chip {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 0.22rem 0.6rem;
+  border-radius: 1px;
+  background: var(--cream);
+  color: var(--khaki);
+  border: 1px solid rgba(44,35,24,0.1);
+}
+.chip.green { background: rgba(58,92,58,0.06); color: var(--forest); border-color: rgba(58,92,58,0.2) }
+.hotel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+.hotel-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--clay);
+}
+.hotel-price span {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 300;
+  color: var(--stone);
+}
+.book-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--clay);
+  color: var(--sand);
+  padding: 0.6rem 1.2rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 1px;
+  transition: background 0.2s;
+}
+.book-btn:hover { background: var(--accent) }
+.book-btn::after { content: '→'; font-size: 0.8rem }
+
+/* ─── COSTS ─────────────────────────────────── */
+.costs-section { background: var(--clay) }
+.costs-section .section-header h2 { color: var(--cream) }
+.costs-section .section-header .eyebrow { color: var(--accent2) }
+.costs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(200,184,154,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.cost-card {
+  background: rgba(61,48,32,0.6);
+  padding: 2rem 1.75rem;
+  border: none;
+}
+.cost-card:hover { background: rgba(61,48,32,0.9) }
+.cost-emoji { font-size: 1.5rem; margin-bottom: 1rem; opacity: 0.85 }
+.cost-cat {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 0.5rem;
+}
+.cost-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--sand);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.cost-note { font-size: 0.78rem; color: var(--stone); font-weight: 300; line-height: 1.4 }
+.cost-total {
+  background: var(--accent);
+  border-radius: 2px;
+  padding: 2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.cost-total-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(244,239,230,0.7);
+}
+.cost-total-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: white;
+  line-height: 1;
+}
+.cost-note-global {
+  margin-top: 1.5rem;
+  font-size: 0.78rem;
+  color: var(--stone);
+  line-height: 1.8;
+}
+.cost-note-global a { color: var(--accent2); text-decoration: underline }
+
+/* ─── TIPS ──────────────────────────────────── */
+.tips-section { background: var(--parch) }
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.tip-card {
+  border-top: 2px solid;
+  padding: 1.75rem 0 0;
+}
+.tip-card:nth-child(1) { border-color: var(--accent) }
+.tip-card:nth-child(2) { border-color: var(--forest) }
+.tip-card:nth-child(3) { border-color: var(--sky) }
+.tip-card:nth-child(4) { border-color: var(--accent2) }
+.tip-card:nth-child(5) { border-color: var(--stone) }
+.tip-card:nth-child(6) { border-color: var(--accent) }
+.tip-icon { font-size: 1.4rem; margin-bottom: 1rem }
+.tip-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--clay);
+  margin-bottom: 0.6rem;
+}
+.tip-text { font-size: 0.88rem; line-height: 1.75; color: var(--khaki); font-weight: 300 }
+
+/* ─── FOOTER ────────────────────────────────── */
+.footer {
+  background: var(--clay);
+  border-top: 1px solid rgba(200,184,154,0.08);
+  padding: 3rem 5%;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--sand);
+}
+.footer-route {
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: var(--stone);
+  text-transform: uppercase;
+  text-align: right;
+}
+
+/* ─── REVEAL ────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible { opacity: 1; transform: none }
+
+/* ─── RESPONSIVE ────────────────────────────── */
+@media (max-width: 900px) {
+  .day-entry, .day-entry.reverse { grid-template-columns: 1fr; direction: ltr }
+  .day-photo { height: 320px }
+  .hotels-row { grid-template-columns: 1fr }
+  .costs-grid { grid-template-columns: repeat(2, 1fr) }
+  .tips-grid { grid-template-columns: repeat(2, 1fr) }
+  .route-stats { flex-wrap: wrap; gap: 1.5rem }
+  .nav-links { display: none }
+}
+@media (max-width: 580px) {
+  .costs-grid { grid-template-columns: 1fr }
+  .tips-grid { grid-template-columns: 1fr }
+  .hero-meta { flex-wrap: wrap }
+}
+</style>
 </head>
 <body>
-<div class="page">
 
-  <!-- ── HEADER ─────────────────────────────────────────────── -->
-  <div class="header">
-    <div class="header-left">
-      <h1>Customer Portal — Delivery Roadmap</h1>
-      <div class="subtitle">
-        Connells Group &nbsp;·&nbsp; Jan 2026 – Jan 2027 &nbsp;·&nbsp;
-        <strong>Status as of 21 April 2026</strong>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">Pirenéus <span>'25</span></div>
+  <ul class="nav-links">
+    <li><a href="#rota">Rota</a></li>
+    <li><a href="#dias">Itinerário</a></li>
+    <li><a href="#hoteis">Hotéis</a></li>
+    <li><a href="#custos">Custos</a></li>
+    <li><a href="#dicas">Dicas</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Rota de Mota · Portugal — Pirenéus — Portugal</div>
+    <h1 class="hero-h1">
+      Mirandela<br>
+      aos <em>Pirenéus</em><br>
+      e Volta
+    </h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-val">~1.850</div>
+        <div class="hero-meta-lbl">Quilómetros</div>
       </div>
-    </div>
-    <div class="legend">
-      <div class="leg"><div class="leg-swatch" style="background:#16a34a;"></div>Complete</div>
-      <div class="leg"><div class="leg-swatch" style="background:#d97706;"></div>In Progress</div>
-      <div class="leg"><div class="leg-swatch" style="background:#bfdbfe; border:1px solid #93c5fd;"></div>Planned</div>
-      <div class="leg"><div class="leg-swatch" style="background:#dc2626;"></div>At Risk</div>
-      <div class="leg"><div class="leg-swatch" style="background:#7c3aed;"></div>QA</div>
-      <div class="leg"><div class="leg-swatch" style="background:#0891b2;"></div>Signoff</div>
-      <div class="leg"><div class="leg-swatch" style="background:#15803d;"></div>PROD</div>
-      <div class="leg"><div class="leg-today"></div>Today (21 Apr)</div>
-    </div>
-  </div>
-
-  <!-- ── GANTT ──────────────────────────────────────────────── -->
-  <div class="gantt-wrap">
-
-    <!-- Phase banners above months -->
-    <div style="display:flex; margin-left: var(--label-w); gap:2px; margin-bottom: 2px; position:relative;">
-      <div style="position:absolute; top:0; left: calc(28.3% + 2px);" class="today-marker-label">▼ Today</div>
-      <!-- Init: months 0-2 = 12.5% -->
-      <div class="phase-banner ph-init" style="flex: 2;">
-        <span class="ph-title">Project Initiation</span>
-        <span class="ph-dates">Jan – Feb 2026</span>
+      <div class="hero-meta-item">
+        <div class="hero-meta-val">5</div>
+        <div class="hero-meta-lbl">Dias</div>
       </div>
-      <!-- M1: months 2-6 = 25% -->
-      <div class="phase-banner ph-m1" style="flex: 4;">
-        <span class="ph-title">Release 1 · MVP</span>
-        <span class="ph-dates">Mar – Jun 2026</span>
+      <div class="hero-meta-item">
+        <div class="hero-meta-val">2.408m</div>
+        <div class="hero-meta-lbl">Altitude Máx.</div>
       </div>
-      <!-- M2: months 6-11 = 31.25% -->
-      <div class="phase-banner ph-m2" style="flex: 5;">
-        <span class="ph-title">Release 2 · Enhance &amp; Expand</span>
-        <span class="ph-dates">Jul – Nov 2026</span>
-      </div>
-      <!-- M3: months 11-13 = Dec–Jan -->
-      <div class="phase-banner ph-m3" style="flex: 2;">
-        <span class="ph-title">Release 3 · Next Level Tools</span>
-        <span class="ph-dates">Dec 2026 – Jan 2027</span>
-      </div>
-    </div>
-
-    <!-- Month labels -->
-    <div class="gantt-months">
-      <div class="mcell">Jan '26</div>
-      <div class="mcell">Feb</div>
-      <div class="mcell">Mar</div>
-      <div class="mcell cur">Apr ◀</div>
-      <div class="mcell">May</div>
-      <div class="mcell">Jun</div>
-      <div class="mcell">Jul</div>
-      <div class="mcell">Aug</div>
-      <div class="mcell">Sep</div>
-      <div class="mcell">Oct</div>
-      <div class="mcell">Nov</div>
-      <div class="mcell">Dec</div>
-      <div class="mcell">Jan '27</div>
-    </div>
-
-    <!-- ── PROGRAMME ROW ──────────── -->
-    <div class="g-row" style="min-height:28px; border-bottom: 2px solid var(--border);">
-      <div class="g-label" style="font-size:10px; color:var(--text-muted); font-weight:700;">PROGRAMME</div>
-      <div class="g-bars">
-        <div class="g-today"></div>
-        <div class="bar bar-programme" style="left:0.0%;width:100.0%;">Connells Customer Portal &nbsp;·&nbsp; Jan 2026 → Jan 2027</div>
-      </div>
-    </div>
-
-    <!-- ════════ PROJECT INITIATION ════════ -->
-    <div class="g-sec sec-init">
-      <div class="g-sec-label">Project Initiation</div>
-      <div class="g-sec-stripe" style="background:#0b2545;">
-        <div class="g-today" style="position:absolute; width:2px; background:rgba(220,38,38,.6); left:28.3%; top:0;bottom:0;z-index:5;"></div>
-        <span class="sec-dates" style="color:#f5d98a;">Jan – Feb 2026</span>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Solution Architecture<br><span class="lsub">Ratify &amp; Confirm</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-done" style="left:0.0%;width:7.69%;">Ratified ✓</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Delivery Plan<br><span class="lsub">Confirm &amp; Baseline</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-done" style="left:0.0%;width:11.54%;">Confirmed ✓</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Journey Mapping<br><span class="lsub">Mobile &amp; Web + M1</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-done" style="left:0.0%;width:15.38%;">Complete ✓</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Business Backlog<br><span class="lsub"> M1</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-done" style="left:0.0%;width:15.38%;">Complete ✓</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Technical Backlog<br><span class="lsub">Wrapping up</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar" style="left:7.69%;width:13.42%;background:linear-gradient(90deg, #16a34a 80%, #d97706 80%);color:#fff;border-radius:4px;height:20px;top:50%;transform:translateY(-50%);position:absolute;display:flex;align-items:center;padding:0 7px;font-size:9px;font-weight:700;z-index:2;">Wrapping Up · ~90%</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Brand Rollout Strategy<br><span class="lsub">Agree approach</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-prog" style="left:7.69%;width:13.42%;">In Progress</div>
-      </div>
-    </div>
-
-    <!-- ════════ MILESTONE 1 ════════ -->
-    <div class="g-sec sec-m1">
-      <div class="g-sec-label">M1 · Mobile &amp; Web Foundation</div>
-      <div class="g-sec-stripe" style="background:#1a5c9a;">
-        <div class="g-today" style="position:absolute;width:2px;background:rgba(220,38,38,.6);left:28.3%;top:0;bottom:0;z-index:5;"></div>
-        <span class="sec-dates" style="color:#bfdbfe;">Mar – Jun 2026</span>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Sprints<br><span class="lsub">S0 · S1 · S2 · S3 · S4</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-done" style="left:15.38%;width:3.69%;">S0 ✓</div>
-        <div class="bar bar-done" style="left:19.08%;width:3.0%;">S1 ✓</div>
-        <div class="bar bar-done" style="left:22.08%;width:2.7%;">S2 ✓</div>
-        <div class="bar bar-done" style="left:24.78%;width:3.5%;">S3 ✓</div>
-        <div class="bar bar-prog" style="left:28.28%;width:5.0%;background:#d97706;">S4 ▶</div>
-      </div>
-    </div>
-    
-    <div class="g-row">
-      <div class="g-label">CP Foundations<br><span class="lsub">Remaining: iOS &amp; Android accts</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar" style="left:20.08%;width:10.46%;background:linear-gradient(90deg, #16a34a 85%, #d97706 85%);color:#fff;border-radius:4px;height:20px;top:50%;transform:translateY(-50%);position:absolute;display:flex;align-items:center;padding:0 7px;font-size:9px;font-weight:700;z-index:2;">Almost Done · iOS/Android accts pending</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">CP Architecture<br><span class="lsub">HLDs · ADRs · TDA</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-prog" style="left:15.38%;width:15.38%;background:linear-gradient(90deg, #16a34a 85%, #d97706 85%);color:#fff;border-radius:4px;height:20px;top:50%;transform:translateY(-50%);position:absolute;display:flex;align-items:center;padding:0 7px;font-size:9px;font-weight:700;z-index:2;">Almost Done · TDA signoff</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Appt Booking – Build<br><span class="lsub">BranchAPI / CoreAPI</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-prog" style="left:19.08%;width:12.46%;">In Progress</div>
-        <div class="bar bar-qa" style="left:31.54%;width:3.08%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">HUB / PRISM / MUMs<br><span class="lsub">Integration</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:27.77%;width:17.23%;">Planned · Apr – May</div>
-        <div class="bar bar-qa" style="left:42.0%;width:3.08%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Dashboard · Home Screen<br><span class="lsub">Simple Dashboard · Key Services</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:30.08%;width:10.0%;">Planned · May–Jun</div>
-        <div class="bar bar-qa" style="left:40.08%;width:3.08%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Dashboard · Product Detail<br><span class="lsub">Simple Dashboard · Key Services</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:37.08%;width:8.0%;">Planned · May–Jun</div>
-        <div class="bar bar-qa" style="left:45.08%;width:3.08%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row" style="background:#fffbeb;">
-      <div class="g-label" style="font-size:9.5px; color:#92400e; font-weight:700;">⚠ Pilot Rollout<br><span style="font-weight:500; font-size:9px;">iOS · Android · Web</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar" style="left:34.46%;width:17.69%;background:#fef3c7;color:#92400e;border:1px dashed #f59e0b;">Pilot – Auth dependent</div>
-      </div>
-    </div>
-
-    <!-- ════════ MILESTONE 2 ════════ -->
-    <div class="g-sec sec-m2">
-      <div class="g-sec-label">M2 · Auth &amp; Smart Property</div>
-      <div class="g-sec-stripe" style="background:#065f46;">
-        <div class="g-today" style="position:absolute;width:2px;background:rgba(220,38,38,.4);left:28.3%;top:0;bottom:0;z-index:5;"></div>
-        <span class="sec-dates" style="color:#a7f3d0;">Jul – Nov 2026</span>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Design<br><span class="lsub">All screens · M2</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:46.15%;width:30.46%;font-size:9.5px;letter-spacing:0.2px;">Planned · Full Design Delivery · Jul – Oct 2026</div>
-      </div>
-    </div>
-
-    <div class="g-row" >
-      <div class="g-label">Authentication<br><span class="lsub">Sign-up &amp; Login</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:46.15%;width:12.31%;">Planned · Jul–Aug</div>
-        <div class="bar bar-qa" style="left:58.46%;width:3.08%;">QA</div>
-        <div class="bar bar-signoff" style="left:61.54%;width:3.08%;">Signoff</div>
-        <div class="bar bar-prod" style="left:64.62%;width:3.08%;">PROD</div>
-        <div class="bar bar-prod" style="left:7.62%;width:10.08%;">Realease one</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Document Storage<br><span class="lsub">Secure Sharing</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:53.85%;width:12.31%;">Planned · Aug–Sep</div>
-        <div class="bar bar-qa" style="left:66.15%;width:3.08%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Real-time Notifications<br><span class="lsub">In-app alerts</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:61.54%;width:8.62%;">Planned · Sep–Oct</div>
-        <div class="bar bar-qa" style="left:70.15%;width:3.08%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Chat &amp; Email Workflows<br><span class="lsub">Contact preferences</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:61.54%;width:8.62%;">Planned · Sep–Oct</div>
-        <div class="bar bar-qa" style="left:70.15%;width:3.08%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Smart Tools &amp; Calculators<br><span class="lsub">Home insights · Valuations</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:69.23%;width:8.62%;">Planned · Oct–Nov</div>
-        <div class="bar bar-qa" style="left:77.85%;width:3.08%;">QA</div>
-        <div class="bar bar-prod" style="left:80.92%;width:3.08%;">PROD</div>
-        <div class="bar bar-prod" style="left:7.62%;width:10.08%;">Realease two</div>
-      </div>
-    </div>
-
-    <!-- ════════ MILESTONE 3 ════════ -->
-    <div class="g-sec sec-m3">
-      <div class="g-sec-label">M3 · Next Level Tools</div>
-      <div class="g-sec-stripe" style="background:#4c1d95;">
-        <div class="g-today" style="position:absolute;width:2px;background:rgba(220,38,38,.4);left:28.3%;top:0;bottom:0;z-index:5;"></div>
-        <span class="sec-dates" style="color:#ddd6fe;">Dec 2026 – Jan 2027</span>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Secure ID Checks<br><span class="lsub">Document Upload</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:84.62%;width:3.08%;">Dec</div>
-        <div class="bar bar-qa" style="left:87.69%;width:0.92%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Mortgage Deals<br><span class="lsub">Start Applications</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:87.08%;width:3.08%;">Dec–Jan</div>
-        <div class="bar bar-qa" style="left:90.15%;width:0.92%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Real-time Alerts<br><span class="lsub">Smart Recommendations</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:89.85%;width:3.08%;">Jan</div>
-        <div class="bar bar-qa" style="left:92.92%;width:0.92%;">QA</div>
-      </div>
-    </div>
-
-    <div class="g-row">
-      <div class="g-label">Credit Scoring<br><span class="lsub">Budgeting &amp; Savings</span></div>
-      <div class="g-bars"><div class="g-today"></div>
-        <div class="bar bar-plan" style="left:92.62%;width:3.08%;">Jan</div>
-        <div class="bar bar-qa" style="left:95.69%;width:0.92%;">QA</div>
-        <div class="bar bar-prod" style="left:96.62%;width:3.54%;">PROD</div>
-        <div class="bar bar-prod" style="left:7.62%;width:10.08%;">Realease three</div>
-      </div>
-    </div>
-
-  </div><!-- /gantt-wrap -->
-
-  <!-- ── DELIVERY SUMMARY TABLE ─────────────────────────────── -->
-  <div class="section-title">Delivery Summary</div>
-  <div class="section-sub">Task breakdown by milestone · Sprint ramp-up · Environment promotion pipeline</div>
-
-  <table class="detail">
-    <thead>
-      <tr>
-        <th style="width:22%">Workstream / Task</th>
-        <th style="width:10%">Milestone</th>
-        <th style="width:11%">Owner</th>
-        <th style="width:9%">Start</th>
-        <th style="width:9%">Target End</th>
-        <th style="width:27%">Notes</th>
-        <th style="width:10%">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-
-      <!-- PROJECT INITIATION -->
-      <tr class="mile-row">
-        <td colspan="7"><span class="mile-dot" style="background:#0b2545;"></span>📋&ensp;PROJECT INITIATION &nbsp;—&nbsp; Jan – Feb 2026</td>
-      </tr>
-      <tr>
-        <td>Ratify Solution Architecture</td>
-        <td>Initiation</td>
-        <td>Stuart / André</td>
-        <td>Jan 2026</td>
-        <td>Jan 2026</td>
-        <td class="note-small">Architecture ratified and signed off</td>
-        <td><span class="badge b-done">Complete</span></td>
-      </tr>
-      <tr>
-        <td>Confirm Delivery Plan</td>
-        <td>Initiation</td>
-        <td>André</td>
-        <td>Jan 2026</td>
-        <td>Feb 2026</td>
-        <td class="note-small">Plan confirmed and baselined</td>
-        <td><span class="badge b-done">Complete</span></td>
-      </tr>
-      <tr>
-        <td>Journey Mapping (Mobile &amp; Web + M1)</td>
-        <td>Initiation</td>
-        <td>Product Team</td>
-        <td>Jan 2026</td>
-        <td>Feb 2026</td>
-        <td class="note-small">Enjoy blueprint leveraged to streamline process</td>
-        <td><span class="badge b-done">Complete</span></td>
-      </tr>
-      <tr>
-        <td>Define Business Backlog</td>
-        <td>Initiation</td>
-        <td>Daniel / Gabriela</td>
-        <td>Jan 2026</td>
-        <td>Mar 2026</td>
-        <td class="note-small">M1 Backlog defined and signoff </td>
-        <td><span class="badge b-done">Complete</span></td>
-      </tr>
-      <tr>
-        <td>Define Technical Backlog</td>
-        <td>Initiation</td>
-        <td>Edgard / Joao</td>
-        <td>Feb 2026</td>
-        <td>Apr 2026</td>
-        <td class="note-small">Wrapping up — nearly complete; final items being refined</td>
-        <td><span class="badge b-prog" style="background:#d4edda;color:#145c38;border:1px dashed #16a34a;">~90% Done</span></td>
-      </tr>
-      <tr>
-        <td>Agree Brand Rollout Strategy</td>
-        <td>Initiation</td>
-        <td>Design Lead</td>
-        <td>Feb 2026</td>
-        <td>Mar 2026</td>
-        <td class="note-small">DS White brand definition in progress; local EA &amp; TNHG</td>
-        <td><span class="badge b-prog">In Progress</span></td>
-      </tr>
-
-      <!-- MILESTONE 1 -->
-      <tr class="mile-row">
-        <td colspan="7"><span class="mile-dot" style="background:#1a5c9a;"></span>🏗️&ensp;MILESTONE 1 — Mobile &amp; Web Foundation &nbsp;·&nbsp; Mar – Jun 2026</td>
-      </tr>
-      <tr>
-        <td>Sprint S0 — Foundation</td>
-        <td>M1</td>
-        <td>Dev Team</td>
-        <td>1 Mar 2026</td>
-        <td>15 Mar 2026</td>
-        <td class="note-small">CI/CD Pipelines · Environments · BFF API Contracts · Mapping Integrations · Booking flow &amp; designs</td>
-        <td><span class="badge b-done">Complete</span></td>
-      </tr>
-      <tr>
-        <td>Sprint S1 — Booking &amp; Architecture</td>
-        <td>M1</td>
-        <td>Dev Team</td>
-        <td>15 Mar 2026</td>
-        <td>28 Mar 2026</td>
-        <td class="note-small">Booking Appt design components (mobile) · HUB/PRISM/MUMS HDL · ADRs 3X · Booking apt screens (mobile)</td>
-        <td><span class="badge b-done">Complete</span></td>
-      </tr>
-      <tr>
-        <td>Sprint S2 — Web &amp; API</td>
-        <td>M1</td>
-        <td>Dev Team</td>
-        <td>28 Mar 2026</td>
-        <td>7 Apr 2026</td>
-        <td class="note-small">Booking screens (mobile &amp; web) · TDA submission · Booking appt BFF API (back-end)</td>
-        <td><span class="badge b-done">Complete</span></td>
-      </tr>
-      <tr>
-        <td>Sprint S3 — Mobile Build &amp; Backend Unblock</td>
-        <td>M1</td>
-        <td>Dev Team</td>
-        <td>8 Apr 2026</td>
-        <td>21 Apr 2026</td>
-        <td class="note-small">Booking apt mobile screens near-complete · Backend API connections unblocked · Product detail &amp; home page design progressed · Karri FE alignment · Security review with Duncan</td>
-        <td><span class="badge b-done">Complete</span></td>
-      </tr>
-      <tr>
-        <td>Sprint S4 — Core API &amp; Web Booking</td>
-        <td>M1</td>
-        <td>Dev Team</td>
-        <td>22 Apr 2026</td>
-        <td>May 2026</td>
-        <td class="note-small">Web FE booking flow (steps 1-6) · iOS/Android API integration · CoreAPI branches/calendar · PEBL API access</td>
-        <td><span class="badge b-prog">In Progress</span></td>
-      </tr>
-      <tr>
-        <td>CP Architecture (HLDs · ADRs · TDA)</td>
-        <td>M1</td>
-        <td>Edgard / Joao</td>
-        <td>Mar 2026</td>
-        <td>Apr 2026</td>
-        <td class="note-small">Security review completed with Duncan · TDA submission expected approval within 2 weeks</td>
-        <td><span class="badge b-prog">In Progress</span></td>
-      </tr>
-      <tr>
-        <td>Appointment Booking – Build</td>
-        <td>M1</td>
-        <td>Dev Team</td>
-        <td>Mar 2026</td>
-        <td>May 2026</td>
-        <td class="note-small">Mobile screens nearly complete · Backend API connections unblocked · CoreAPI integration started in S4</td>
-        <td><span class="badge b-prog">In Progress</span></td>
-      </tr>
-      <tr>
-        <td>HUB / PRISM / MUMs Integration</td>
-        <td>M1</td>
-        <td>Edgard / Joao</td>
-        <td>Mar 2026</td>
-        <td>May 2026</td>
-        <td class="note-small" style="color:#dc2626;">⚠ High risk (4/5) · In Progress · Home Screen is blocked until complete</td>
-        <td><span class="badge b-prog">In Progress</span></td>
-      </tr>
-      <tr>
-        <td>Simple Dashboard · Home Screen<br><span style="font-size:9.5px;color:#64748b;">Key Services &amp; Products</span></td>
-        <td>M1</td>
-        <td>Dev Team</td>
-        <td>May 2026</td>
-        <td>Jun 2026</td>
-        <td class="note-small">Part of Simple Dashboard. Starts after HUB/PRISM/MUMs integration completes</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Simple Dashboard · Product Detail<br><span style="font-size:9.5px;color:#64748b;">Key Services &amp; Products</span></td>
-        <td>M1</td>
-        <td>Dev Team</td>
-        <td>May 2026</td>
-        <td>Jun 2026</td>
-        <td class="note-small">Part of Simple Dashboard. Property detail · location · sales history · market value</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr style="background:#fff1f2;">
-        <td colspan="7" style="padding:8px 12px; font-size:10px; font-weight:800; color:#991b1b; text-transform:uppercase; letter-spacing:0.4px; border-left:4px solid #dc2626;">
-          🔐 &nbsp;⚠ GO-LIVE IS BLOCKED UNTIL AUTHENTICATION IS DELIVERED (MILESTONE 2) — PILOT ROLLOUT DATE IS AUTHENTICATION-DEPENDANT
-        </td>
-      </tr>
-      <tr>
-        <td>Pilot Rollout (iOS · Android · Web)</td>
-        <td>M1</td>
-        <td>TBC</td>
-        <td>TBC (Auth)</td>
-        <td>TBC (Auth)</td>
-        <td class="note-small">One app in each app store. <strong style="color:#dc2626;">Date subject to Authentication delivery in M2.</strong></td>
-        <td><span class="badge b-risk">Auth Blocked</span></td>
-      </tr>
-
-      <!-- MILESTONE 2 -->
-      <tr class="mile-row">
-        <td colspan="7"><span class="mile-dot" style="background:#065f46;"></span>🚀&ensp;MILESTONE 2 — Smart Property &amp; Mortgage Ecosystem &nbsp;·&nbsp; Jul – Nov 2026</td>
-      </tr>
-      <tr>
-        <td>Design — Full Delivery</td>
-        <td>M2</td>
-        <td>Design Team</td>
-        <td>Jul 2026</td>
-        <td>Nov 2026</td>
-        <td class="note-small">All screen designs for M2 features delivered across the milestone</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Customer Authentication (Sign-up &amp; Login)</td>
-        <td>M2</td>
-        <td>TBC</td>
-        <td>Jul 2026</td>
-        <td>Aug 2026</td>
-        <td class="note-small" style="color:#dc2626;">⚠ Critical blocker — unlocks M1 Pilot Rollout go-live</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Rich Property Details</td>
-        <td>M2</td>
-        <td>TBC</td>
-        <td>Jul 2026</td>
-        <td>Aug 2026</td>
-        <td class="note-small">Location · sales history · market value · fully branded iOS, Android &amp; Web</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Secure Document Storage &amp; Sharing</td>
-        <td>M2</td>
-        <td>TBC</td>
-        <td>Aug 2026</td>
-        <td>Sep 2026</td>
-        <td class="note-small"></td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Real-time Notifications</td>
-        <td>M2</td>
-        <td>TBC</td>
-        <td>Sep 2026</td>
-        <td>Oct 2026</td>
-        <td class="note-small">In-app notification engine</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Built-in Chat &amp; Email Workflows</td>
-        <td>M2</td>
-        <td>TBC</td>
-        <td>Sep 2026</td>
-        <td>Oct 2026</td>
-        <td class="note-small">Easy management of contact preferences &amp; accounts</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Smart Tools &amp; Calculators</td>
-        <td>M2</td>
-        <td>TBC</td>
-        <td>Oct 2026</td>
-        <td>Nov 2026</td>
-        <td class="note-small">Home insights, valuations &amp; market data</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-
-      <!-- MILESTONE 3 -->
-      <tr class="mile-row">
-        <td colspan="7"><span class="mile-dot" style="background:#4c1d95;"></span>⭐&ensp;MILESTONE 3 — Next Level Tools for Smarter Mortgages &nbsp;·&nbsp; Dec 2026 – Jan 2027</td>
-      </tr>
-      <tr>
-        <td>Book Mortgage Appointments Online</td>
-        <td>M3</td>
-        <td>TBC</td>
-        <td>Dec 2026</td>
-        <td>Dec 2026</td>
-        <td class="note-small">F2F or Teams booking (dependant on customer type)</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Secure ID Checks &amp; Document Upload</td>
-        <td>M3</td>
-        <td>TBC</td>
-        <td>Dec 2026</td>
-        <td>Dec 2026</td>
-        <td class="note-small"></td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Mortgage Deals &amp; Start Applications</td>
-        <td>M3</td>
-        <td>TBC</td>
-        <td>Dec 2026</td>
-        <td>Jan 2027</td>
-        <td class="note-small">Access mortgage deals where required</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Real-time Alerts &amp; Smart Recommendations</td>
-        <td>M3</td>
-        <td>TBC</td>
-        <td>Jan 2027</td>
-        <td>Jan 2027</td>
-        <td class="note-small">Products &amp; properties · Smart product recommendations</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-      <tr>
-        <td>Credit Scoring &amp; Budgeting Tools</td>
-        <td>M3</td>
-        <td>TBC</td>
-        <td>Jan 2027</td>
-        <td>Jan 2027</td>
-        <td class="note-small">Integrated budgeting, savings &amp; credit scoring built into journey</td>
-        <td><span class="badge b-plan">Planned</span></td>
-      </tr>
-
-    </tbody>
-  </table>
-
-
-  <!-- ── ENVIRONMENT PROMOTION PIPELINE ───────────────────────── -->
-  <div class="pipeline-wrap">
-    <div class="section-title" style="margin-top:36px;">Environment Promotion Pipeline</div>
-    <div class="section-sub">Promotion cycle per feature: Dev → QA (~3 days) → Biz Signoff (~4 days) → PROD (1 day) · ASSUMPTION: dates TBC where Auth dependency unresolved</div>
-
-    <!-- Stage flow header with arrows -->
-    <div class="pipe-flow">
-      <div class="pf-stage pf-dev">
-        <div class="pf-title">Dev</div>
-        <div class="pf-sub">Feature development &amp; unit testing</div>
-      </div>
-      <div class="pf-arrow">›</div>
-      <div class="pf-stage pf-qa">
-        <div class="pf-title">QA (Test Env)</div>
-        <div class="pf-sub">Functional testing · ~3 days</div>
-      </div>
-      <div class="pf-arrow">›</div>
-      <div class="pf-stage pf-signoff">
-        <div class="pf-title">Biz Signoff (Pre-Prod)</div>
-        <div class="pf-sub">Stakeholder approval · ~4 days</div>
-      </div>
-      <div class="pf-arrow">›</div>
-      <div class="pf-stage pf-prod">
-        <div class="pf-title">Production</div>
-        <div class="pf-sub">Live deployment · 1 day</div>
-      </div>
-    </div>
-
-    <table class="pipeline">
-      <thead>
-        <tr class="th-labels">
-          <th style="width:26%">Workstream / Task</th>
-          <th style="width:5%">M</th>
-          <th style="width:12%">Dev Complete</th>
-          <th style="width:13%">QA</th>
-          <th style="width:13%">Biz Signoff</th>
-          <th style="width:13%">PROD Release</th>
-          <th style="width:9%">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <!-- M1 -->
-        <tr class="pipe-mile">
-          <td colspan="7"><span class="mile-dot" style="background:#1a5c9a;"></span>🏗️&ensp;MILESTONE 1 — Mobile &amp; Web Foundation</td>
-        </tr>
-        <tr>
-          <td>Appointment Booking – Build<br><span style="font-size:9.5px;color:#64748b;font-style:italic;">BranchAPI / CoreAPI · go-live gated by Auth (M2)</span></td>
-          <td>M1</td>
-          <td><span class="chip chip-dev">May 2026</span></td>
-          <td><span class="chip chip-qa">May 2026</span></td>
-          <td><span class="chip chip-blocked">Auth dep.</span></td>
-          <td><span class="chip chip-blocked">Auth dep.</span></td>
-          <td><span class="badge b-prog">In Progress</span></td>
-        </tr>
-        <tr>
-          <td>HUB / PRISM / MUMs Integration<br><span style="font-size:9.5px;color:#dc2626;font-style:italic;">⚠ Blocker for Simple Dashboard</span></td>
-          <td>M1</td>
-          <td><span class="chip chip-dev">May 2026</span></td>
-          <td><span class="chip chip-qa">May 2026</span></td>
-          <td><span class="chip chip-blocked">Auth dep.</span></td>
-          <td><span class="chip chip-blocked">Auth dep.</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr class="sub-group-hdr">
-          <td colspan="7">📱 Simple Dashboard for Key Services &amp; Products<span style="font-weight:400; margin-left:8px; color:#64748b;">— starts after HUB/PRISM/MUMs complete</span></td>
-        </tr>
-        <tr class="sub-row">
-          <td>↳ Home Screen – Build</td>
-          <td>M1</td>
-          <td><span class="chip chip-dev">Jun 2026</span></td>
-          <td><span class="chip chip-qa">Jun 2026</span></td>
-          <td><span class="chip chip-blocked">Auth dep.</span></td>
-          <td><span class="chip chip-blocked">Auth dep.</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr class="sub-row">
-          <td>↳ Product Detail – Build</td>
-          <td>M1</td>
-          <td><span class="chip chip-dev">Jun 2026</span></td>
-          <td><span class="chip chip-qa">Jun 2026</span></td>
-          <td><span class="chip chip-blocked">Auth dep.</span></td>
-          <td><span class="chip chip-blocked">Auth dep.</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-
-        <!-- M2 -->
-        <tr class="pipe-mile">
-          <td colspan="7"><span class="mile-dot" style="background:#065f46;"></span>🚀&ensp;MILESTONE 2 — Smart Property &amp; Mortgage Ecosystem</td>
-        </tr>
-        <tr style="background:#fff7ed;">
-          <td><strong>Authentication (Sign-up &amp; Login)</strong><br><span style="font-size:9.5px;color:#dc2626;font-style:italic;">⚠ Critical — unlocks M1 Pilot Rollout go-live</span></td>
-          <td>M2</td>
-          <td><span class="chip chip-dev">Aug 2026</span></td>
-          <td><span class="chip chip-qa">Aug 2026</span></td>
-          <td><span class="chip chip-signoff">Sep 2026</span></td>
-          <td><span class="chip chip-prod">Sep 2026</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr>
-          <td>Rich Property Details</td>
-          <td>M2</td>
-          <td><span class="chip chip-dev">Aug 2026</span></td>
-          <td><span class="chip chip-qa">Aug 2026</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr>
-          <td>Secure Document Storage &amp; Sharing</td>
-          <td>M2</td>
-          <td><span class="chip chip-dev">Sep 2026</span></td>
-          <td><span class="chip chip-qa">Sep 2026</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr>
-          <td>Real-time Notifications</td>
-          <td>M2</td>
-          <td><span class="chip chip-dev">Oct 2026</span></td>
-          <td><span class="chip chip-qa">Oct 2026</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr>
-          <td>Built-in Chat &amp; Email Workflows</td>
-          <td>M2</td>
-          <td><span class="chip chip-dev">Oct 2026</span></td>
-          <td><span class="chip chip-qa">Oct 2026</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr style="background:#f0fdf4;">
-          <td><strong>Smart Tools &amp; Calculators</strong><br><span style="font-size:9.5px;color:#065f46;font-style:italic;">Last M2 deliverable → PROD</span></td>
-          <td>M2</td>
-          <td><span class="chip chip-dev">Nov 2026</span></td>
-          <td><span class="chip chip-qa">Nov 2026</span></td>
-          <td><span class="chip chip-signoff">Nov 2026</span></td>
-          <td><span class="chip chip-prod">Dec 2026</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-
-        <!-- M3 -->
-        <tr class="pipe-mile">
-          <td colspan="7"><span class="mile-dot" style="background:#4c1d95;"></span>⭐&ensp;MILESTONE 3 — Next Level Tools for Smarter Mortgages</td>
-        </tr>
-        <tr>
-          <td>Book Mortgage Appointments Online</td>
-          <td>M3</td>
-          <td><span class="chip chip-dev">Dec 2026</span></td>
-          <td><span class="chip chip-qa">Dec 2026</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr>
-          <td>Secure ID Checks &amp; Document Upload</td>
-          <td>M3</td>
-          <td><span class="chip chip-dev">Dec 2026</span></td>
-          <td><span class="chip chip-qa">Dec 2026</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr>
-          <td>Mortgage Deals &amp; Start Applications</td>
-          <td>M3</td>
-          <td><span class="chip chip-dev">Jan 2027</span></td>
-          <td><span class="chip chip-qa">Jan 2027</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr>
-          <td>Real-time Alerts &amp; Smart Recommendations</td>
-          <td>M3</td>
-          <td><span class="chip chip-dev">Jan 2027</span></td>
-          <td><span class="chip chip-qa">Jan 2027</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="chip chip-tbc">TBC</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-        <tr style="background:#f5f3ff;">
-          <td><strong>Credit Scoring &amp; Budgeting Tools</strong><br><span style="font-size:9.5px;color:#4c1d95;font-style:italic;">Final M3 deliverable → PROD</span></td>
-          <td>M3</td>
-          <td><span class="chip chip-dev">Jan 2027</span></td>
-          <td><span class="chip chip-qa">Jan 2027</span></td>
-          <td><span class="chip chip-signoff">Jan 2027</span></td>
-          <td><span class="chip chip-prod">Jan 2027</span></td>
-          <td><span class="badge b-plan">Planned</span></td>
-        </tr>
-
-      </tbody>
-    </table>
-
-    <!-- Pipeline colour legend -->
-    <div class="pipeline-legend">
-      <span style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px;">Legend:</span>
-      <span class="pl-item"><span class="pl-swatch" style="background:#1e40af;"></span>Dev — Feature development &amp; unit testing</span>
-      <span class="pl-item"><span class="pl-swatch" style="background:#7c3aed;"></span>QA — Functional testing in Test Env (~3 days)</span>
-      <span class="pl-item"><span class="pl-swatch" style="background:#0891b2;"></span>Biz Signoff — Stakeholder approval in Pre-Prod (~4 days)</span>
-      <span class="pl-item"><span class="pl-swatch" style="background:#15803d;"></span>PROD — Live deployment (~1 day)</span>
-      <span class="pl-item"><span class="pl-swatch" style="background:#fee2e2; border:1px solid #fca5a5;"></span>Auth dep. — Blocked pending M2 Authentication delivery</span>
-      <span class="pl-item"><span class="pl-swatch" style="background:#e2e8f0;"></span>TBC — Date to be confirmed</span>
-    </div>
-  </div>
-
-  <!-- ── SPRINT RAMP-UP + RISKS ─────────────────────────────── -->
-  <div class="risk-grid">
-
-    <!-- Sprint ramp-up -->
-    <div class="risk-card">
-      <div class="risk-card-title">⚡ Sprint Ramp-up — Team Readiness (M1)</div>
-      <div style="padding: 14px 14px 16px;">
-        <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px; font-weight:600;">Channel coverage (9) &amp; Back-end staffing per sprint</div>
-        <div class="sprint-row">
-          <div class="sprint-chip sc-done">
-            <span class="sc-name">S0</span>
-            <span class="sc-status">Done</span>
-          </div>
-          <div class="sprint-chip sc-done">
-            <span class="sc-name">S1</span>
-            <span class="sc-status">Done</span>
-          </div>
-          <div class="sprint-chip sc-done">
-            <span class="sc-name">S2</span>
-            <span class="sc-status">Done</span>
-          </div>
-          <div class="sprint-chip sc-done">
-            <span class="sc-name">S3</span>
-            <span class="sc-status">Done</span>
-          </div>
-          <div class="sprint-chip sc-prog">
-            <span class="sc-name">S4</span>
-            <span class="sc-status">Now</span>
-          </div>
-        </div>
-        <div style="margin-top:12px;">
-          <table style="width:100%; border-collapse:collapse; font-size:10.5px;">
-            <thead>
-              <tr>
-                <th style="text-align:left; color:var(--text-muted); font-weight:700; padding-bottom:5px; font-size:9.5px; text-transform:uppercase; letter-spacing:.4px;">Sprint</th>
-                <th style="text-align:left; color:var(--text-muted); font-weight:700; padding-bottom:5px; font-size:9.5px; text-transform:uppercase; letter-spacing:.4px;">Key Deliverables</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-top:1px solid #f1f5f9;">
-                <td style="padding:6px 0; font-weight:700; color:#166534;">S0 ✓</td>
-                <td style="padding:6px 0; color:var(--text-muted);">CI/CD pipelines · Environments · BFF API Contracts · Mapping Integrations · Booking apt flow/designs/backlog</td>
-              </tr>
-              <tr style="border-top:1px solid #f1f5f9;">
-                <td style="padding:6px 0; font-weight:700; color:#166534;">S1 ✓</td>
-                <td style="padding:6px 0; color:var(--text-muted);">Booking apt design components (mobile) · Booking apt HLD · HUB/PRISM/MUMS HDL · ADRs 3X · Booking apt screens (mobile)</td>
-              </tr>
-              <tr style="border-top:1px solid #f1f5f9;">
-                <td style="padding:6px 0; font-weight:700; color:#166534;">S2 ✓</td>
-                <td style="padding:6px 0; color:var(--text-muted);">Booking apt screens (mobile) · Booking apt design components (Web) · TDA submission · Booking appt – BFF API (back-end)</td>
-              </tr>
-              <tr style="border-top:1px solid #f1f5f9;">
-                <td style="padding:6px 0; font-weight:700; color:#166534;">S3 ✓</td>
-                <td style="padding:6px 0; color:var(--text-muted);">Booking apt mobile screens near-complete · Backend API connections unblocked · Product detail &amp; home page design · Karri FE alignment · Security review with Duncan</td>
-              </tr>
-              <tr style="border-top:1px solid #f1f5f9;">
-                <td style="padding:6px 0; font-weight:700; color:#92400e;">S4 ▶</td>
-                <td style="padding:6px 0; color:var(--text-muted);">Web FE: Complete booking flow steps 1-6 with API · iOS/Android: Connect APIs, wire data flow · BE: CoreAPI foundation, CalendarAPI, PEBL access</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Key Risks — Top 5 
-    <div class="risk-card">
-      <div class="risk-card-title">⚠️ Key Risks — Top 5 (of 12)</div>
-      <table class="risk-tbl">
-        <thead>
-          <tr>
-            <th style="width:6%">Ref</th>
-            <th style="width:14%">Owner</th>
-            <th style="width:30%">Risk</th>
-            <th style="width:5%">P</th>
-            <th style="width:5%">I</th>
-            <th style="width:6%">Score</th>
-            <th style="width:10%">Level</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style="background:#fff5f5;">
-            <td style="font-weight:700;">RK08</td>
-            <td>Stefan / Joao Batista</td>
-            <td>Fabric viability — uncertainty whether Fabric can be the consolidation layer</td>
-            <td style="text-align:center;">4</td>
-            <td style="text-align:center;">4</td>
-            <td style="text-align:center;"><span class="impact-pill impact-high">16</span></td>
-            <td><span class="badge b-risk">Extreme</span></td>
-          </tr>
-          <tr style="background:#fff5f5;">
-            <td style="font-weight:700;">RK01</td>
-            <td>SA / Joao Batista</td>
-            <td>Auth platform — secure login becomes critical path and slips M1</td>
-            <td style="text-align:center;">4</td>
-            <td style="text-align:center;">3</td>
-            <td style="text-align:center;"><span class="impact-pill impact-high">12</span></td>
-            <td><span class="badge b-risk">High</span></td>
-          </tr>
-          <tr style="background:#fff5f5;">
-            <td style="font-weight:700;">RK02</td>
-            <td>SA / Joao Batista</td>
-            <td>SSO/Passwordless — may be rejected by security or require rework</td>
-            <td style="text-align:center;">3</td>
-            <td style="text-align:center;">4</td>
-            <td style="text-align:center;"><span class="impact-pill impact-high">12</span></td>
-            <td><span class="badge b-risk">High</span></td>
-          </tr>
-          <tr style="background:#fff5f5;">
-            <td style="font-weight:700;">RK05</td>
-            <td>Daniel Lopes / Kelly Reader</td>
-            <td>Identity matching fails — inconsistent customer records</td>
-            <td style="text-align:center;">3</td>
-            <td style="text-align:center;">4</td>
-            <td style="text-align:center;"><span class="impact-pill impact-high">12</span></td>
-            <td><span class="badge b-risk">High</span></td>
-          </tr>
-          <tr style="background:#fff5f5;">
-            <td style="font-weight:700;">RK10</td>
-            <td>Stefan</td>
-            <td>CCT capability availability — services not ready or lack capabilities</td>
-            <td style="text-align:center;">3</td>
-            <td style="text-align:center;">4</td>
-            <td style="text-align:center;"><span class="impact-pill impact-high">12</span></td>
-            <td><span class="badge b-risk">High</span></td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="padding:10px 14px; background:#fffbeb; border-top:1px solid #fde68a;">
-        <span style="font-size:10px; color:#92400e; font-weight:600;">⚠ ASSUMPTION:</span>
-        <span style="font-size:10px; color:#92400e;"> M1 go-live is blocked until Authentication dependency (M2) is resolved.</span>
-        <span style="font-size:9.5px; color:#64748b; margin-left:6px;">P = Probability · I = Impact · Score = P × I · Full register: 12 risks in Project Tracker</span>
-      </div>
-    </div>-->
-
-  </div>
-
-  <!-- ── FINANCIAL PERFORMANCE ──────────────────────────────── 
-  <div style="margin-top:36px;">
-    <div class="section-title">Financial Performance</div>
-    <div class="section-sub">Monthly actuals vs. baseline forecast · Earned Value Management (EVM) metrics · Source: Customer Portal Financial Tracker</div>
-
-    
-    <table class="detail" style="margin-bottom:24px;">
-      <thead>
-        <tr>
-          <th style="width:12%">Month</th>
-          <th>Jan '26</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th>
-          <th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th><th>Jan '27</th>
-          <th style="background:#c8961e; color:#0b2545; font-weight:800;">Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="font-weight:700; color:var(--navy);">Actuals (£)</td>
-          <td style="background:#d4edda;">47,708</td>
-          <td style="background:#d4edda;">78,815</td>
-          <td style="background:#d4edda;">175,955</td>
-          <td style="background:#fef3c7;">171,574</td>
-          <td style="background:#fef3c7;">178,737</td>
-          <td style="background:#fef3c7;">178,086</td>
-          <td style="background:#fef3c7;">188,119</td>
-          <td style="background:#fef3c7;">155,373</td>
-          <td style="background:#fef3c7;">172,973</td>
-          <td style="background:#fef3c7;">166,899</td>
-          <td style="background:#fef3c7;">151,777</td>
-          <td style="background:#fef3c7;">127,306</td>
-          <td style="background:#fef3c7;">123,487</td>
-          <td style="font-weight:800; background:#f8fafc;">1,916,810</td>
-        </tr>
-        <tr>
-          <td style="font-weight:700; color:var(--navy);">Forecast (£)</td>
-          <td>45,319</td>
-          <td>97,144</td>
-          <td>171,206</td>
-          <td>192,307</td>
-          <td>190,247</td>
-          <td>183,549</td>
-          <td>175,927</td>
-          <td>164,827</td>
-          <td>164,827</td>
-          <td>157,584</td>
-          <td>153,644</td>
-          <td>134,224</td>
-          <td>105,226</td>
-          <td style="font-weight:800; background:#f8fafc;">1,936,029</td>
-        </tr>
-        <tr style="border-top:2px solid var(--border);">
-          <td style="font-weight:700; color:var(--navy);">Variance (£)</td>
-          <td style="color:#dc2626;">+2,389</td>
-          <td style="color:#16a34a;">−18,329</td>
-          <td style="color:#dc2626;">+4,749</td>
-          <td style="color:#16a34a;">−20,733</td>
-          <td style="color:#16a34a;">−11,510</td>
-          <td style="color:#16a34a;">−5,463</td>
-          <td style="color:#dc2626;">+12,192</td>
-          <td style="color:#16a34a;">−9,454</td>
-          <td style="color:#dc2626;">+8,146</td>
-          <td style="color:#dc2626;">+9,315</td>
-          <td style="color:#16a34a;">−1,867</td>
-          <td style="color:#16a34a;">−6,918</td>
-          <td style="color:#dc2626;">+18,261</td>
-          <td style="font-weight:800; background:#d4edda; color:#166534;">−19,219</td>
-        </tr>
-      </tbody>
-    </table>
-    <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
-      <span style="font-size:9.5px; padding:3px 10px; border-radius:4px; background:#d4edda; color:#166534; font-weight:600;">Green = Confirmed actuals (Jan–Mar)</span>
-      <span style="font-size:9.5px; padding:3px 10px; border-radius:4px; background:#fef3c7; color:#92400e; font-weight:600;">Amber = Flash / forecast (Apr–Jan '27)</span>
-      <span style="font-size:9.5px; padding:3px 10px; border-radius:4px; background:#f8fafc; color:#64748b; font-weight:600;">Variance: positive = over forecast · negative = under forecast</span>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:3px; margin-top:20px; margin-bottom:20px;">
-      <div style="background:#0b2545; color:#f5d98a; padding:12px 16px; border-radius:6px 0 0 6px; text-align:center;">
-        <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; opacity:.8;">Project Initiation</div>
-        <div style="font-size:18px; font-weight:800; margin-top:4px;">£126,523</div>
-        <div style="font-size:9px; margin-top:2px; opacity:.75;">Jan – Feb · 6.6%</div>
-      </div>
-      <div style="background:#1a5c9a; color:#dbeafe; padding:12px 16px; text-align:center;">
-        <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; opacity:.8;">M1 · Foundation</div>
-        <div style="font-size:18px; font-weight:800; margin-top:4px;">£704,352</div>
-        <div style="font-size:9px; margin-top:2px; opacity:.75;">Mar – Jun · 36.7%</div>
-      </div>
-      <div style="background:#065f46; color:#d1fae5; padding:12px 16px; text-align:center;">
-        <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; opacity:.8;">M2 · Enhance</div>
-        <div style="font-size:18px; font-weight:800; margin-top:4px;">£835,141</div>
-        <div style="font-size:9px; margin-top:2px; opacity:.75;">Jul – Nov · 43.6%</div>
-      </div>
-      <div style="background:#4c1d95; color:#ede9fe; padding:12px 16px; border-radius:0 6px 6px 0; text-align:center;">
-        <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; opacity:.8;">M3 · Next Level</div>
-        <div style="font-size:18px; font-weight:800; margin-top:4px;">£250,793</div>
-        <div style="font-size:9px; margin-top:2px; opacity:.75;">Dec – Jan '27 · 13.1%</div>
-      </div>
-    </div>
-
-    <div style="margin-top:24px; border:1px solid var(--border); border-radius:8px; overflow:hidden;">
-      <div style="background:var(--navy); color:#f5d98a; padding:10px 16px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;">
-        📊 Earned Value Management (EVM) — As of 21 April 2026 (Month 4)
-      </div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0; border-bottom:1px solid var(--border);">
-        <div style="padding:16px; text-align:center; border-right:1px solid var(--border);">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted);">BAC</div>
-          <div style="font-size:8.5px; color:var(--text-muted); margin-top:1px;">Budget At Completion</div>
-          <div style="font-size:22px; font-weight:800; color:var(--navy); margin-top:6px;">£1,936,029</div>
-          <div style="font-size:9px; color:var(--text-muted); margin-top:3px;">Total approved baseline budget</div>
-        </div>
-        <div style="padding:16px; text-align:center; border-right:1px solid var(--border);">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted);">PV</div>
-          <div style="font-size:8.5px; color:var(--text-muted); margin-top:1px;">Planned Value</div>
-          <div style="font-size:22px; font-weight:800; color:#1e40af; margin-top:6px;">£313,669</div>
-          <div style="font-size:9px; color:var(--text-muted); margin-top:3px;">16.2% planned complete × BAC</div>
-        </div>
-        <div style="padding:16px; text-align:center; border-right:1px solid var(--border);">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted);">EV</div>
-          <div style="font-size:8.5px; color:var(--text-muted); margin-top:1px;">Earned Value</div>
-          <div style="font-size:22px; font-weight:800; color:#7c3aed; margin-top:6px;">£300,084</div>
-          <div style="font-size:9px; color:var(--text-muted); margin-top:3px;">15.5% actual complete × BAC</div>
-        </div>
-        <div style="padding:16px; text-align:center;">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted);">AC</div>
-          <div style="font-size:8.5px; color:var(--text-muted); margin-top:1px;">Actual Cost</div>
-          <div style="font-size:22px; font-weight:800; color:#d97706; margin-top:6px;">£302,478</div>
-          <div style="font-size:9px; color:var(--text-muted); margin-top:3px;">Actual spend Jan – Mar</div>
-        </div>
-      </div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0; border-bottom:1px solid var(--border); background:#f8fafc;">
-        <div style="padding:12px 16px; text-align:center; border-right:1px solid var(--border);">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted);">CPI (EV ÷ AC)</div>
-          <div style="font-size:20px; font-weight:800; color:#16a34a; margin-top:4px;">0.99</div>
-          <div style="font-size:9px; color:#16a34a; font-weight:600; margin-top:2px;">≈ On Budget</div>
-        </div>
-        <div style="padding:12px 16px; text-align:center; border-right:1px solid var(--border);">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted);">SPI (EV ÷ PV)</div>
-          <div style="font-size:20px; font-weight:800; color:#d97706; margin-top:4px;">0.96</div>
-          <div style="font-size:9px; color:#d97706; font-weight:600; margin-top:2px;">Slightly Behind Schedule</div>
-        </div>
-        <div style="padding:12px 16px; text-align:center; border-right:1px solid var(--border);">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted);">CV (EV − AC)</div>
-          <div style="font-size:20px; font-weight:800; color:#d97706; margin-top:4px;">−£2,394</div>
-          <div style="font-size:9px; color:var(--text-muted); font-weight:600; margin-top:2px;">Marginal overrun</div>
-        </div>
-        <div style="padding:12px 16px; text-align:center;">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted);">SV (EV − PV)</div>
-          <div style="font-size:20px; font-weight:800; color:#d97706; margin-top:4px;">−£13,585</div>
-          <div style="font-size:9px; color:var(--text-muted); font-weight:600; margin-top:2px;">Schedule variance</div>
-        </div>
-      </div>
-
-      <div style="padding:10px 16px; background:#fffbeb; font-size:9.5px; color:#92400e;">
-        <strong>Methodology &amp; Assumptions:</strong>
-        BAC = 1st Forecast baseline (£1,936,029) · PV = cumulative baseline spend through Mar (£45,319 + £97,144 + £171,206) ·
-        AC = confirmed actuals Jan–Mar (£47,708 + £78,815 + £175,955) ·
-        EV = weighted milestone % complete × BAC — Initiation ~95% done (weight 6.6%), M1 ~25% done (weight 36.7%), M2/M3 not started ⇒ ~15.5% actual complete ·
-        CPI &gt; 1.0 = under budget · SPI &gt; 1.0 = ahead of schedule
-      </div>
-
-      <div style="padding:14px 16px 16px; border-top:1px solid var(--border);">
-        <div style="font-size:10px; font-weight:700; color:var(--navy); margin-bottom:8px;">Budget Burn — Cumulative (£302,478 of £1,936,029)</div>
-        <div style="position:relative; height:24px; background:#e2e8f0; border-radius:4px; overflow:hidden;">
-          <div style="position:absolute; left:0; top:0; bottom:0; width:15.6%; background:linear-gradient(90deg, #16a34a 0%, #1d6fa4 100%); border-radius:4px 0 0 4px;"></div>
-          <div style="position:absolute; left:16.2%; top:0; bottom:0; width:2px; background:#dc2626; z-index:2;"></div>
-          <div style="position:absolute; left:16.5%; top:3px; font-size:8.5px; font-weight:700; color:#dc2626;">← PV line (16.2%)</div>
-          <div style="position:absolute; left:2%; top:5px; font-size:8.5px; font-weight:700; color:#fff;">15.6% spent</div>
-        </div>
-        <div style="display:flex; justify-content:space-between; margin-top:4px;">
-          <span style="font-size:9px; color:var(--text-muted);">£0</span>
-          <span style="font-size:9px; color:var(--text-muted);">£1,936,029</span>
-        </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-val">Circular</div>
+        <div class="hero-meta-lbl">Tipo de Rota</div>
       </div>
     </div>
   </div>
--->
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
 
-<!-- ── SCRUM METRICS ──────────────────────────────────────── -->
-<div style="margin-top:36px;">
-  <div class="section-title">Scrum Metrics</div>
-  <div class="section-sub">Sprint velocity tracking · Team capacity &amp; throughput · Sprint goals</div>
-
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:16px;">
-
-    <!-- Channels Team Velocity -->
-    <div style="border:1px solid var(--border); border-radius:8px; overflow:hidden;">
-      <div style="background:var(--navy); color:var(--gold-light); padding:10px 16px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;">
-        📊 Channels Team — Velocity (Story Points)
+<!-- MAP -->
+<section class="map-section" id="rota">
+  <div class="map-header">
+    <div>
+      <div class="eyebrow" style="color:var(--accent2);margin-bottom:0.75rem">O Percurso</div>
+      <h2>O Percurso <em>Completo</em></h2>
+    </div>
+    <div class="route-stats">
+      <div class="r-stat">
+        <div class="r-stat-num">5</div>
+        <div class="r-stat-lbl">Dias</div>
       </div>
-      <div style="padding:16px;">
-        <div style="display:flex; gap:12px; align-items:flex-end; margin-bottom:16px; height:120px;">
-          <!-- S1 bar -->
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--navy); margin-bottom:4px;">46</div>
-            <div style="width:100%; background:#16a34a; border-radius:4px 4px 0 0; height:57px;"></div>
-            <div style="font-size:9px; font-weight:700; color:var(--text-muted); margin-top:4px;">S1</div>
-          </div>
-          <!-- S2 bar -->
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--navy); margin-bottom:4px;">76</div>
-            <div style="width:100%; background:#16a34a; border-radius:4px 4px 0 0; height:95px;"></div>
-            <div style="font-size:9px; font-weight:700; color:var(--text-muted); margin-top:4px;">S2</div>
-          </div>
-          <!-- S3 bar -->
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--navy); margin-bottom:4px;">60</div>
-            <div style="width:100%; background:#16a34a; border-radius:4px 4px 0 0; height:75px;"></div>
-            <div style="font-size:9px; font-weight:700; color:var(--text-muted); margin-top:4px;">S3</div>
-          </div>
-          <!-- S4 bar (goal) -->
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--orange); margin-bottom:4px;">—</div>
-            <div style="width:100%; background:#fef3c7; border:1px dashed #d97706; border-radius:4px 4px 0 0; height:75px;"></div>
-            <div style="font-size:9px; font-weight:700; color:var(--orange); margin-top:4px;">S4 ▶</div>
+      <div class="r-stat">
+        <div class="r-stat-num">4</div>
+        <div class="r-stat-lbl">Países</div>
+      </div>
+      <div class="r-stat">
+        <div class="r-stat-num">2</div>
+        <div class="r-stat-lbl">Dias nos Pirenéus</div>
+      </div>
+    </div>
+  </div>
+  <div class="map-embed">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m76!1m12!1m3!1d3788284.8!2d-4.2!3d42.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m61!3e0!4m5!1s0xd3918bf7c2e4b9d%3A0xee4ab18820b19b1f!2sMirandela%2C+Portugal!3m2!1d41.4853!2d-7.1808!4m5!1s0xd5914000d4ab7a3%3A0x49c87a2eef28e8a8!2sZaragoza%2C+Spain!3m2!1d41.6474!2d-0.8861!4m5!1s0x12a4cf5f8a7e74d1%3A0xfe8a9ba27ac40000!2sJaca%2C+Spain!3m2!1d42.5717!2d-0.547!4m5!1s0x12a4604ccddd3765%3A0xa00780001fa0000!2sAndorra+la+Vella!3m2!1d42.5063!2d1.5218!4m5!1s0x12aef5e8cd68c9a9%3A0x3bb44ab3e2161a68!2sCol+du+Tourmalet!3m2!1d42.9081!2d0.1452!4m5!1s0x12ae8e0a61b995b3%3A0xc8b98b011440563a!2sCol+d%27Aubisque!3m2!1d42.9765!2d-0.3396!4m5!1s0x12a50d05d4ae7c85%3A0x4e7b19e2e74a3510!2sPamplona%2C+Spain!3m2!1d42.8125!2d-1.6457!4m5!1s0x12b6dd2a36b11dd7%3A0x46bbfbc54568b!2sPicos+de+Europa!3m2!1d43.175!2d-4.85!4m5!1s0xd3918bf7c2e4b9d%3A0xee4ab18820b19b1f!2sMirandela%2C+Portugal!3m2!1d41.4853!2d-7.1808!5e0!3m2!1spt!2spt!4v1683800000000" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</section>
+
+<!-- DAYS -->
+<section class="itinerary-section" id="dias">
+
+  <!-- DAY 1 -->
+  <div class="day-entry">
+    <div class="day-photo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Zaragoza_-_Bas%C3%ADlica_del_Pilar_y_r%C3%ADo_Ebro.jpg/1280px-Zaragoza_-_Bas%C3%ADlica_del_Pilar_y_r%C3%ADo_Ebro.jpg"
+           alt="Zaragoza Basílica del Pilar"
+           onerror="this.parentElement.style.background='#3D3020'">
+      <div class="day-photo-overlay"></div>
+      <div class="day-photo-number">DIA 01 · QUARTA</div>
+      <div class="day-photo-location">Zaragoza, Espanha</div>
+    </div>
+    <div class="day-text reveal">
+      <div class="day-weekday">Quarta-Feira · Dia 1</div>
+      <div class="day-distance">~490 km · A-62 e A-2</div>
+      <div class="day-title">Mirandela → Zaragoza</div>
+      <p class="day-desc">O dia de aceleração. Partida cedo de Mirandela, atravessa a fronteira para Espanha pelo A-62 e segue pelo A-2 direto a Zaragoza. A cidade surpreende: a <strong>Basílica del Pilar</strong> ao longo do Rio Ebro é um dos panoramas mais dramáticos do interior espanhol. Chega a meio da tarde, estica as pernas e guarda as energias. O espetáculo começa amanhã.</p>
+      <div class="day-tags">
+        <span class="tag tag-road">A-62 · A-2</span>
+        <span class="tag tag-city">Zaragoza</span>
+        <span class="tag tag-road">Motorizada</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-entry reverse">
+    <div class="day-photo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Spain._Pyrenees._Road_N-260.jpg/1280px-Spain._Pyrenees._Road_N-260.jpg"
+           alt="N-260 Pirenéus Espanhóis"
+           onerror="this.parentElement.style.background='#2D4A2A'">
+      <div class="day-photo-overlay"></div>
+      <div class="day-photo-number">DIA 02 · QUINTA</div>
+      <div class="day-photo-location">N-260 · Pirenéus Espanhóis</div>
+    </div>
+    <div class="day-text reveal">
+      <div class="day-weekday">Quinta-Feira · Dia 2</div>
+      <div class="day-distance">~330 km · N-260 → Envalira</div>
+      <div class="day-title">Zaragoza → Jaca → N-260 → Andorra la Vella</div>
+      <p class="day-desc">Aqui começa o verdadeiro propósito da viagem. Paragem em <strong>Jaca</strong> para café numa vila medieval perfeitamente preservada. Depois embarcas na <strong>N-260</strong> — uma candidata permanente às melhores estradas de mota do mundo. Cânions de calcário, curvas encadeadas, aldeias escondidas. O dia termina em Andorra la Vella pelo Porto de Envalira a <strong>2.408m</strong> — o mais alto dos Pirenéus. Enche o depósito: o combustível em Andorra é significativamente mais barato.</p>
+      <div class="day-tags">
+        <span class="tag tag-epic">N-260 Lendária</span>
+        <span class="tag tag-mtn">Envalira 2.408m</span>
+        <span class="tag tag-fuel">Combustível Barato</span>
+        <span class="tag tag-city">Andorra</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDITORIAL BREAK -->
+  <div class="editorial-break">
+    <div class="editorial-break-bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Col_du_Tourmalet_-_route.jpg/1280px-Col_du_Tourmalet_-_route.jpg')"></div>
+    <div class="editorial-break-overlay"></div>
+    <div class="editorial-break-text">
+      <div class="eyebrow">Os Grandes Portos de Montanha</div>
+      <h3>Col du Tourmalet<br><em>& Col d'Aubisque</em></h3>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-entry">
+    <div class="day-photo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Col_du_Tourmalet_-_vue_g%C3%A9n%C3%A9rale.jpg/1280px-Col_du_Tourmalet_-_vue_g%C3%A9n%C3%A9rale.jpg"
+           alt="Col du Tourmalet"
+           onerror="this.parentElement.style.background='#1B3A5C'">
+      <div class="day-photo-overlay"></div>
+      <div class="day-photo-number">DIA 03 · SEXTA</div>
+      <div class="day-photo-location">Col du Tourmalet · 2.115m</div>
+    </div>
+    <div class="day-text reveal">
+      <div class="day-weekday">Sexta-Feira · Dia 3</div>
+      <div class="day-distance">~280 km · O Dia dos Passes</div>
+      <div class="day-title">Andorra → Tourmalet → Col d'Aubisque → Pamplona</div>
+      <p class="day-desc">O dia mais extraordinário da rota. Saída de Andorra pelo lado francês em direção ao <strong>Col du Tourmalet a 2.115m</strong> — imortalizado pelo Tour de France desde 1910, a estrada serpenteia entre cimos pelados e vales profundos. Depois o <strong>Col d'Aubisque a 1.709m</strong>, esculpido na rocha com vistas sobre os Pirenéus que não têm paralelo. Não planeies chegar a uma hora — vais parar frequentemente. O dia termina em <strong>Pamplona</strong>, com pintxos no casco antigo.</p>
+      <div class="day-tags">
+        <span class="tag tag-epic">Tourmalet 2.115m</span>
+        <span class="tag tag-mtn">Aubisque 1.709m</span>
+        <span class="tag tag-city">Pamplona</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-entry reverse">
+    <div class="day-photo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Picos_de_Europa_desde_el_Mirador_del_Cable_%28Cantabria%29.jpg/1280px-Picos_de_Europa_desde_el_Mirador_del_Cable_%28Cantabria%29.jpg"
+           alt="Picos de Europa"
+           onerror="this.parentElement.style.background='#2D4A2A'">
+      <div class="day-photo-overlay"></div>
+      <div class="day-photo-number">DIA 04 · SÁBADO</div>
+      <div class="day-photo-location">Picos de Europa · Norte de Espanha</div>
+    </div>
+    <div class="day-text reveal">
+      <div class="day-weekday">Sábado · Dia 4</div>
+      <div class="day-distance">~320 km · Norte de Espanha</div>
+      <div class="day-title">Pamplona → Picos de Europa → Santander</div>
+      <p class="day-desc">O regresso pela rota mais inesperada. De Pamplona para oeste através do País Basco, depois os <strong>Picos de Europa</strong> — uma cordilheira de calcário branco que emerge subitamente das planícies do norte com picos a mais de 2.600m. A estrada de Fuente Dé é de uma beleza desconcertante. O dia termina em <strong>Santander</strong>, junto às águas frias do Cantábrico.</p>
+      <div class="day-tags">
+        <span class="tag tag-epic">Picos de Europa</span>
+        <span class="tag tag-mtn">2.600m</span>
+        <span class="tag tag-city">Santander</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-entry">
+    <div class="day-photo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Picos_de_Europa_-_Fuente_D%C3%A9_%28Cantabria%29.jpg/1280px-Picos_de_Europa_-_Fuente_D%C3%A9_%28Cantabria%29.jpg"
+           alt="Fuente De Picos de Europa"
+           onerror="this.parentElement.style.background='#3D3020'">
+      <div class="day-photo-overlay"></div>
+      <div class="day-photo-number">DIA 05 · DOMINGO</div>
+      <div class="day-photo-location">Regresso a Casa</div>
+    </div>
+    <div class="day-text reveal">
+      <div class="day-weekday">Domingo · Dia 5</div>
+      <div class="day-distance">~430 km · A-67 e A-62</div>
+      <div class="day-title">Santander → Salamanca → Mirandela</div>
+      <p class="day-desc">O último troço. De Santander segues pelo A-67 em direção a Valladolid — se o tempo permitir, uma paragem em <strong>Salamanca</strong> vale cada minuto: a cidade universitária com a sua catedral de arenito dourado é um dos conjuntos históricos mais belos da Península. Depois o A-62 de volta a casa. Chegas a Mirandela ao final da tarde com 1.850km nas pernas e um arquivo de memórias que dura uma vida.</p>
+      <div class="day-tags">
+        <span class="tag tag-road">A-67 · A-62</span>
+        <span class="tag tag-city">Salamanca</span>
+        <span class="tag tag-city">Mirandela</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- HOTELS -->
+<section class="section hotels-section" id="hoteis">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">Onde Dormir</div>
+      <h2>Hotéis Recomendados</h2>
+    </div>
+
+    <!-- ZARAGOZA -->
+    <div class="hotel-location reveal">
+      <div class="hotel-location-header">
+        <div class="hotel-location-name">Zaragoza</div>
+        <div class="hotel-location-night">Noite 1 · Quarta</div>
+      </div>
+      <div class="hotels-row">
+        <div class="hotel-card">
+          <div class="hotel-card-accent" style="background:var(--accent)"></div>
+          <div class="hotel-card-body">
+            <div class="hotel-tier">★★★★ · Centro Histórico</div>
+            <div class="hotel-name">Hotel Sauce</div>
+            <p class="hotel-desc">A 50m da Basílica del Pilar. Quartos com pavimento em madeira, pequeno-almoço caseiro e estacionamento dedicado a motas a €6/noite — confirmado por bikers.</p>
+            <div class="hotel-chips">
+              <span class="chip green">🏍️ Mota €6/noite</span>
+              <span class="chip">WiFi</span>
+              <span class="chip">Centro</span>
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">~€80 <span>/ noite</span></div>
+              <a href="https://www.booking.com/hotel/es/sauce.html" target="_blank" class="book-btn">Reservar</a>
+            </div>
           </div>
         </div>
-        <div style="border-top:1px solid var(--border); padding-top:10px;">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted); margin-bottom:4px;">Avg Velocity: 60.7 pts/sprint</div>
-        </div>
-        <div style="margin-top:12px; padding:10px 12px; background:#fffbeb; border-radius:6px; border:1px solid #fde68a;">
-          <div style="font-size:9.5px; font-weight:700; color:var(--orange-text); margin-bottom:4px;">🎯 Sprint 4 Goal — Channels Team</div>
-          <div style="font-size:10px; color:var(--text); line-height:1.5;">
-            <strong>Web FE:</strong> Complete Appointment Booking flow from Steps 1 through 6 with API integration<br>
-            <strong>iOS:</strong> Connect to APIs for Appointments, Brokers &amp; Branches · Wire data flow across booking steps · Close out design-review polish items<br>
-            <strong>Android:</strong> Connect to APIs for Appointments, Brokers &amp; Branches · Setup CI/CD and mobile environment from Dev to Play Store · Close out design-review polish items
+        <div class="hotel-card">
+          <div class="hotel-card-accent" style="background:var(--accent2)"></div>
+          <div class="hotel-card-body">
+            <div class="hotel-tier">★★★★★ · Opção Premium</div>
+            <div class="hotel-name">NH Collection Gran Hotel</div>
+            <p class="hotel-desc">Hotel histórico com rating 9.2. Restaurante, spa e localização privilegiada no coração da cidade. Para quando queres tratar-te bem após 490km de estrada.</p>
+            <div class="hotel-chips">
+              <span class="chip green">Rating 9.2</span>
+              <span class="chip">Spa</span>
+              <span class="chip">Restaurante</span>
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">~€140 <span>/ noite</span></div>
+              <a href="https://www.booking.com/hotel/es/nh-collection-gran-hotel-de-zaragoza.html" target="_blank" class="book-btn">Reservar</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Backend Team Velocity -->
-    <div style="border:1px solid var(--border); border-radius:8px; overflow:hidden;">
-      <div style="background:var(--navy); color:var(--gold-light); padding:10px 16px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;">
-        📊 Backend Team — Velocity (Story Points)
+    <!-- ANDORRA -->
+    <div class="hotel-location reveal">
+      <div class="hotel-location-header">
+        <div class="hotel-location-name">Andorra la Vella</div>
+        <div class="hotel-location-night">Noite 2 · Quinta</div>
       </div>
-      <div style="padding:16px;">
-        <div style="display:flex; gap:12px; align-items:flex-end; margin-bottom:16px; height:120px;">
-          <!-- S1 bar -->
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--navy); margin-bottom:4px;">5</div>
-            <div style="width:100%; background:#16a34a; border-radius:4px 4px 0 0; height:15px;"></div>
-            <div style="font-size:9px; font-weight:700; color:var(--text-muted); margin-top:4px;">S1</div>
-          </div>
-          <!-- S2 bar -->
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--navy); margin-bottom:4px;">18</div>
-            <div style="width:100%; background:#16a34a; border-radius:4px 4px 0 0; height:53px;"></div>
-            <div style="font-size:9px; font-weight:700; color:var(--text-muted); margin-top:4px;">S2</div>
-          </div>
-          <!-- S3 bar -->
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--navy); margin-bottom:4px;">41</div>
-            <div style="width:100%; background:#16a34a; border-radius:4px 4px 0 0; height:120px;"></div>
-            <div style="font-size:9px; font-weight:700; color:var(--text-muted); margin-top:4px;">S3</div>
-          </div>
-          <!-- S4 bar (goal) -->
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--orange); margin-bottom:4px;">—</div>
-            <div style="width:100%; background:#fef3c7; border:1px dashed #d97706; border-radius:4px 4px 0 0; height:100px;"></div>
-            <div style="font-size:9px; font-weight:700; color:var(--orange); margin-top:4px;">S4 ▶</div>
+      <div class="hotels-row">
+        <div class="hotel-card">
+          <div class="hotel-card-accent" style="background:var(--sky)"></div>
+          <div class="hotel-card-body">
+            <div class="hotel-tier">★★★★ · Central</div>
+            <div class="hotel-name">Hotel Best Andorra Center</div>
+            <p class="hotel-desc">Piscina aquecida interior, ginásio e sauna. Estacionamento seguro para motas confirmado por bikers. Perto das lojas duty-free — ideal para reabastecer e descansar.</p>
+            <div class="hotel-chips">
+              <span class="chip green">🏍️ Mota Segura</span>
+              <span class="chip">Piscina</span>
+              <span class="chip">Spa</span>
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">~€95 <span>/ noite</span></div>
+              <a href="https://www.booking.com/hotel/ad/best-andorra-center.html" target="_blank" class="book-btn">Reservar</a>
+            </div>
           </div>
         </div>
-        <div style="border-top:1px solid var(--border); padding-top:10px;">
-          <div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted); margin-bottom:4px;">Avg Velocity: 21.3 pts/sprint · Trend: ↑ Strong ramp-up (+720% from S1 to S3)</div>
+        <div class="hotel-card">
+          <div class="hotel-card-accent" style="background:var(--forest)"></div>
+          <div class="hotel-card-body">
+            <div class="hotel-tier">★★★★ · Vistas de Montanha</div>
+            <div class="hotel-name">Andorra Park Hotel</div>
+            <p class="hotel-desc">Quartos espaçosos com varandas sobre os Pirenéus, piscina exterior sazonal e ginásio. Pequeno-almoço buffet muito bem avaliado pelos hóspedes.</p>
+            <div class="hotel-chips">
+              <span class="chip green">Vistas Pirenéus</span>
+              <span class="chip">Piscina</span>
+              <span class="chip">Estacionamento</span>
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">~€120 <span>/ noite</span></div>
+              <a href="https://www.booking.com/hotel/ad/andorra-park.html" target="_blank" class="book-btn">Reservar</a>
+            </div>
+          </div>
         </div>
-        <div style="margin-top:12px; padding:10px 12px; background:#fffbeb; border-radius:6px; border:1px solid #fde68a;">
-          <div style="font-size:9.5px; font-weight:700; color:var(--orange-text); margin-bottom:4px;">🎯 Sprint 4 Goal — Backend Team</div>
-          <div style="font-size:10px; color:var(--text); line-height:1.5;">
-            <strong>BE:</strong> Deliver Core.Api foundation for Appointment Booking (branches, brands, advisors) and CalendarAPI for availability &amp; booking · Unblock PEBL API DEV access to create leads
+      </div>
+    </div>
+
+    <!-- PAMPLONA -->
+    <div class="hotel-location reveal">
+      <div class="hotel-location-header">
+        <div class="hotel-location-name">Pamplona</div>
+        <div class="hotel-location-night">Noite 3 · Sexta</div>
+      </div>
+      <div class="hotels-row">
+        <div class="hotel-card">
+          <div class="hotel-card-accent" style="background:var(--accent)"></div>
+          <div class="hotel-card-body">
+            <div class="hotel-tier">★★★★ · Favorito de Bikers</div>
+            <div class="hotel-name">Alma Hotel · Muga de Beloso</div>
+            <p class="hotel-desc">Estacionamento subterrâneo seguro, piscina e ginásio. Muito recomendado pela comunidade de motociclistas. Boa localização com acesso fácil à cidade velha.</p>
+            <div class="hotel-chips">
+              <span class="chip green">🏍️ Favorito Bikers</span>
+              <span class="chip">Subterrâneo</span>
+              <span class="chip">Piscina</span>
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">~€85 <span>/ noite</span></div>
+              <a href="https://www.booking.com/hotel/es/alma-pamplona.html" target="_blank" class="book-btn">Reservar</a>
+            </div>
+          </div>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-card-accent" style="background:var(--khaki)"></div>
+          <div class="hotel-card-body">
+            <div class="hotel-tier">★★★★ · Cidade Velha</div>
+            <div class="hotel-name">Pamplona Catedral Hotel</div>
+            <p class="hotel-desc">No coração do casco antigo, a poucos passos da Catedral e da Plaza del Castillo. Estacionamento privado, terraço e fitness center.</p>
+            <div class="hotel-chips">
+              <span class="chip green">Centro Histórico</span>
+              <span class="chip">Estac. Privado</span>
+              <span class="chip">Terraço</span>
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">~€100 <span>/ noite</span></div>
+              <a href="https://www.booking.com/hotel/es/pamplona-catedral.html" target="_blank" class="book-btn">Reservar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SANTANDER / PICOS -->
+    <div class="hotel-location reveal">
+      <div class="hotel-location-header">
+        <div class="hotel-location-name">Santander / Picos de Europa</div>
+        <div class="hotel-location-night">Noite 4 · Sábado</div>
+      </div>
+      <div class="hotels-row">
+        <div class="hotel-card">
+          <div class="hotel-card-accent" style="background:var(--forest)"></div>
+          <div class="hotel-card-body">
+            <div class="hotel-tier">★★★★★ · Experiência Única</div>
+            <div class="hotel-name">Parador de Fuente Dé</div>
+            <p class="hotel-desc">No coração dos Picos de Europa, com vistas épicas para os picos calcários. Cozinha asturiana de nível. A experiência definitiva após o dia mais dramático da rota.</p>
+            <div class="hotel-chips">
+              <span class="chip green">Picos de Europa</span>
+              <span class="chip">Vistas Épicas</span>
+              <span class="chip">Restaurante</span>
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">~€110 <span>/ noite</span></div>
+              <a href="https://www.booking.com/hotel/es/parador-de-fuente-de.html" target="_blank" class="book-btn">Reservar</a>
+            </div>
+          </div>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-card-accent" style="background:var(--sky)"></div>
+          <div class="hotel-card-body">
+            <div class="hotel-tier">★★★ · Junto ao Mar</div>
+            <div class="hotel-name">Hotel Abba Santander</div>
+            <p class="hotel-desc">Central em Santander junto à baía cantábrica. Estacionamento, quartos modernos e bom buffet de pequeno-almoço. Boa base para o último dia de regresso.</p>
+            <div class="hotel-chips">
+              <span class="chip green">Baía Cantábrica</span>
+              <span class="chip">Estacionamento</span>
+              <span class="chip">Buffet</span>
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">~€75 <span>/ noite</span></div>
+              <a href="https://www.booking.com/hotel/es/abba-santander.html" target="_blank" class="book-btn">Reservar</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
   </div>
-</div>
+</section>
 
-  <!-- ── FOOTER ─────────────────────────────────────────────── -->
-  <div class="footer">
-    <span>Created by André · Senior Delivery Manager · Connells Group Customer Portal Programme</span>
-    <span>21 April 2026</span>
-    <span class="conf">CONFIDENTIAL</span>
+<!-- COSTS -->
+<section class="section costs-section" id="custos">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">Orçamento</div>
+      <h2>Estimativa de Custos</h2>
+    </div>
+    <div class="costs-grid reveal">
+      <div class="cost-card">
+        <div class="cost-emoji">🏨</div>
+        <div class="cost-cat">Hotéis · 4 Noites</div>
+        <div class="cost-val">~€360</div>
+        <div class="cost-note">€90/noite em média · opções de 3 a 5 estrelas</div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-emoji">⛽</div>
+        <div class="cost-cat">Combustível</div>
+        <div class="cost-val">~€155</div>
+        <div class="cost-note">1.850km · ~6.5L/100km · €1.45/L médio</div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-emoji">🍽️</div>
+        <div class="cost-cat">Alimentação</div>
+        <div class="cost-val">~€200</div>
+        <div class="cost-note">€40/dia incluindo refeições e cafés de estrada</div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-emoji">🛣️</div>
+        <div class="cost-cat">Portagens</div>
+        <div class="cost-val">~€45</div>
+        <div class="cost-note">Autoestradas Espanha e Portugal</div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-emoji">☕</div>
+        <div class="cost-cat">Cafés e Paragens</div>
+        <div class="cost-val">~€50</div>
+        <div class="cost-note">Paragens ao longo dos 5 dias</div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-emoji">🎲</div>
+        <div class="cost-cat">Buffer / Extras</div>
+        <div class="cost-val">~€50</div>
+        <div class="cost-note">Imprevistos, visitas, compras</div>
+      </div>
+    </div>
+    <div class="cost-total reveal">
+      <div class="cost-total-label">Total Estimado · Rota Circular · 1 Pessoa</div>
+      <div class="cost-total-val">~€860</div>
+    </div>
+    <p class="cost-note-global reveal">* Combustível calculado para consumo médio de mota grande (~6.5L/100km). Preços de hotel com base nas opções listadas acima. Poupas até €80 escolhendo sempre a opção mais económica. Andorra tem combustível ~20% mais barato — enche o depósito antes de sair para França. Valores de 2025, sujeitos a alteração.</p>
   </div>
+</section>
 
-</div>
+<!-- TIPS -->
+<section class="section tips-section" id="dicas">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="eyebrow">Preparação</div>
+      <h2>Dicas Essenciais</h2>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card reveal">
+        <div class="tip-icon">⛽</div>
+        <div class="tip-title">Combustível em Andorra</div>
+        <p class="tip-text">Andorra não aplica IVA na gasolina. O combustível é cerca de 20% mais barato do que em Espanha ou França. Enche o depósito ao máximo antes de cruzar para o lado francês — é a paragem mais rentável da viagem.</p>
+      </div>
+      <div class="tip-card reveal">
+        <div class="tip-icon">🌡️</div>
+        <div class="tip-title">Temperatura nos Portos</div>
+        <p class="tip-text">Acima dos 2.000m pode fazer muito frio mesmo no verão. A diferença entre o vale e o cume do Tourmalet pode atingir 15°C. Leva sempre uma camada intermédia na bagagem — vale o peso.</p>
+      </div>
+      <div class="tip-card reveal">
+        <div class="tip-icon">📅</div>
+        <div class="tip-title">Melhor Época</div>
+        <p class="tip-text">Maio, Junho e Setembro são os meses ideais. Julho e Agosto têm muito turismo nos portos de montanha. Evita Outubro e Novembro — os passes podem estar encerrados por neve sem aviso prévio.</p>
+      </div>
+      <div class="tip-card reveal">
+        <div class="tip-icon">🛣️</div>
+        <div class="tip-title">Portagens em Espanha</div>
+        <p class="tip-text">Algumas autoestradas espanholas têm portagem. Leva €30 em moedas ou cartão. As estradas nacionais são gratuitas e frequentemente mais interessantes — não tenhas pressa de apanhar a autoestrada.</p>
+      </div>
+      <div class="tip-card reveal">
+        <div class="tip-icon">📸</div>
+        <div class="tip-title">Dia 3 — Não Tenhas Pressa</div>
+        <p class="tip-text">O trajeto Andorra → Tourmalet → Aubisque → Pamplona tem apenas 280km, mas são quilómetros que se percorrem devagar. Vai parar frequentemente. Não marques nada para a noite — deixa o dia fluir.</p>
+      </div>
+      <div class="tip-card reveal">
+        <div class="tip-icon">🏔️</div>
+        <div class="tip-title">Picos de Europa — Não Percas</div>
+        <p class="tip-text">A estrada até Fuente Dé é de uma beleza inesperada para quem vem dos Pirenéus. O desvio para o teleférico, se o tempo estiver favorável, oferece vistas sobre os picos de calcário que compensam qualquer desvio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">Mirandela aos Pirenéus, e Volta</div>
+    <div class="footer-route">~1.850 km · 5 Dias · Portugal → Espanha → Andorra → França → Espanha → Portugal</div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 70);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 </body>
 </html>
-
