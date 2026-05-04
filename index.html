@@ -6,706 +6,347 @@
 <title>Mirandela aos Pirenéus — Rota de Mota</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
-/* ─── TOKENS ───────────────────────────────── */
+/* ─── TOKENS ─────────────────────────────── */
 :root {
-  --clay:    #2C2318;
-  --earth:   #3D3020;
-  --khaki:   #6B5D47;
-  --sand:    #C8B89A;
-  --cream:   #F4EFE6;
-  --parch:   #FAF6EF;
-  --white:   #FDFCFA;
-  --accent:  #A0522D;   /* burnt sienna */
-  --accent2: #D4843A;   /* amber */
-  --sky:     #5B7FA6;
-  --forest:  #3A5C3A;
-  --stone:   #9A8E80;
-  --rule:    rgba(44,35,24,0.12);
+  --clay:   #2C2318;
+  --earth:  #3D3020;
+  --khaki:  #6B5D47;
+  --sand:   #C8B89A;
+  --cream:  #F4EFE6;
+  --parch:  #FAF6EF;
+  --white:  #FDFCFA;
+  --accent: #A0522D;
+  --amber:  #D4843A;
+  --sky:    #5B7FA6;
+  --forest: #3A5C3A;
+  --stone:  #9A8E80;
+  --rule:   rgba(44,35,24,0.12);
 }
-
-/* ─── RESET ────────────────────────────────── */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
-html { scroll-behavior:smooth; font-size:16px }
-body {
-  background: var(--parch);
-  color: var(--clay);
-  font-family: 'Jost', sans-serif;
-  font-weight: 300;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-img { display:block; max-width:100% }
+html { scroll-behavior:smooth }
+body { background:var(--parch); color:var(--clay); font-family:'Jost',sans-serif; font-weight:300; -webkit-font-smoothing:antialiased; overflow-x:hidden }
 a { text-decoration:none; color:inherit }
 
-/* ─── TYPOGRAPHY ───────────────────────────── */
-.display {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-.serif { font-family: 'Cormorant Garamond', Georgia, serif }
-.eyebrow {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-/* ─── NAV ──────────────────────────────────── */
+/* ─── NAV ────────────────────────────────── */
 .nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 200;
-  padding: 1.4rem 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(40,30,18,0.88);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(200,184,154,0.08);
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  padding:1.3rem 5%;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(30,22,12,0.93);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(200,184,154,0.07);
 }
-.nav-brand {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--sand);
-  letter-spacing: 0.06em;
-}
-.nav-brand span { color: var(--accent2); font-style: italic }
-.nav-links {
-  display: flex;
-  gap: 2.2rem;
-  list-style: none;
-}
-.nav-links a {
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(200,184,154,0.6);
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--sand) }
+.nav-brand { font-family:'Cormorant Garamond',serif; font-size:1.15rem; font-weight:600; color:var(--sand); letter-spacing:0.06em }
+.nav-brand em { font-style:italic; color:var(--amber) }
+.nav-links { display:flex; gap:2rem; list-style:none }
+.nav-links a { font-size:0.7rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:rgba(200,184,154,0.5); transition:color 0.2s }
+.nav-links a:hover { color:var(--sand) }
 
-/* ─── HERO ──────────────────────────────────── */
+/* ─── HERO — CSS illustrated scene ──────── */
 .hero {
-  height: 100vh;
-  min-height: 600px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
+  height:100vh; min-height:620px;
+  position:relative; overflow:hidden;
+  display:flex; align-items:flex-end;
+  background: linear-gradient(180deg,
+    #1A3A5C 0%,
+    #2B5278 15%,
+    #3D6B8A 28%,
+    #C4956A 50%,
+    #D4A574 58%,
+    #8B6B4A 65%,
+    #5C4030 80%,
+    #3D2C1E 100%
+  );
 }
-.hero-img {
-  position: absolute;
-  inset: 0;
+
+/* Sky atmosphere */
+.hero-sky {
+  position:absolute; inset:0;
   background:
-    linear-gradient(to bottom,
-      rgba(20,14,8,0.25) 0%,
-      rgba(20,14,8,0.05) 30%,
-      rgba(20,14,8,0.55) 70%,
-      rgba(20,14,8,0.90) 100%),
-    url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Col_du_Tourmalet_-_route.jpg/1280px-Col_du_Tourmalet_-_route.jpg')
-    center center / cover no-repeat;
+    radial-gradient(ellipse 60% 40% at 70% 25%, rgba(255,180,80,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 20% at 72% 28%, rgba(255,220,120,0.5) 0%, transparent 50%);
 }
+
+/* SVG mountain layers */
+.hero-mountains {
+  position:absolute; bottom:0; left:0; right:0;
+  height:75%;
+}
+
+/* Gradient overlay for text legibility */
+.hero-gradient {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom,
+    rgba(15,10,5,0.1) 0%,
+    rgba(15,10,5,0.0) 35%,
+    rgba(15,10,5,0.5) 65%,
+    rgba(15,10,5,0.92) 100%
+  );
+}
+
 .hero-content {
-  position: relative;
-  z-index: 2;
-  padding: 0 5% 5rem;
-  max-width: 1300px;
-  width: 100%;
+  position:relative; z-index:5;
+  padding:0 5% 5rem; max-width:1300px; width:100%;
 }
 .hero-eyebrow {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--accent2);
-  margin-bottom: 1.6rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  font-size:0.63rem; font-weight:600; letter-spacing:0.32em; text-transform:uppercase;
+  color:var(--amber); margin-bottom:1.5rem;
+  display:flex; align-items:center; gap:1rem;
 }
-.hero-eyebrow::before {
-  content: '';
-  width: 36px;
-  height: 1px;
-  background: var(--accent2);
-}
+.hero-eyebrow::before { content:''; width:36px; height:1px; background:var(--amber) }
 .hero-h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(3.8rem, 9vw, 8.5rem);
-  font-weight: 300;
-  line-height: 0.93;
-  color: #F4EFE6;
-  letter-spacing: -0.02em;
-  margin-bottom: 2rem;
+  font-family:'Cormorant Garamond',serif; font-weight:300;
+  font-size:clamp(4rem,9vw,9rem); line-height:0.93;
+  color:var(--cream); letter-spacing:-0.02em; margin-bottom:2.2rem;
 }
-.hero-h1 em {
-  font-style: italic;
-  color: var(--accent2);
-}
+.hero-h1 em { font-style:italic; color:var(--amber) }
 .hero-meta {
-  display: flex;
-  gap: 0;
-  border: 1px solid rgba(200,184,154,0.2);
-  border-radius: 2px;
-  overflow: hidden;
-  width: fit-content;
+  display:flex; width:fit-content;
+  border:1px solid rgba(200,184,154,0.2); border-radius:2px; overflow:hidden;
 }
 .hero-meta-item {
-  padding: 0.75rem 1.5rem;
-  border-right: 1px solid rgba(200,184,154,0.2);
-  text-align: center;
+  padding:0.8rem 1.6rem; border-right:1px solid rgba(200,184,154,0.15); text-align:center;
 }
-.hero-meta-item:last-child { border-right: none }
-.hero-meta-val {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--cream);
-  line-height: 1;
-}
-.hero-meta-lbl {
-  font-size: 0.58rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(200,184,154,0.5);
-  margin-top: 0.25rem;
-}
+.hero-meta-item:last-child { border-right:none }
+.hero-meta-val { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:600; color:var(--cream); line-height:1 }
+.hero-meta-lbl { font-size:0.56rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:rgba(200,184,154,0.45); margin-top:0.22rem }
+
 .hero-scroll {
-  position: absolute;
-  bottom: 2.5rem;
-  right: 5%;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
+  position:absolute; bottom:2.5rem; right:5%; z-index:5;
+  display:flex; flex-direction:column; align-items:center; gap:0.75rem;
 }
-.hero-scroll span {
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(200,184,154,0.45);
-  writing-mode: vertical-rl;
-}
-.hero-scroll-line {
-  width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, rgba(200,184,154,0.4), transparent);
+.hero-scroll span { font-size:0.56rem; font-weight:600; letter-spacing:0.28em; text-transform:uppercase; color:rgba(200,184,154,0.35); writing-mode:vertical-rl }
+.hero-scroll-line { width:1px; height:55px; background:linear-gradient(to bottom,rgba(200,184,154,0.35),transparent) }
+
+/* ─── DAY SCENE ILLUSTRATIONS ────────────── */
+.scene {
+  width:100%; height:100%;
+  position:absolute; inset:0;
 }
 
-/* ─── SECTION SHELL ─────────────────────────── */
-.section { padding: 6rem 5% }
-.section-inner { max-width: 1200px; margin: 0 auto }
-.section-header { margin-bottom: 4rem }
-.section-header .eyebrow { margin-bottom: 1rem }
-.section-header h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+/* Day 1 — Zaragoza warm dusk */
+.scene-zaragoza {
+  background:linear-gradient(180deg,
+    #2A1F3D 0%, #5C3D6B 20%, #C4785A 45%,
+    #D4956A 55%, #A06840 68%, #6B4830 82%, #3D2C1E 100%
+  );
+}
+.scene-zaragoza::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 50% 30% at 60% 35%, rgba(255,160,60,0.45) 0%, transparent 60%);
 }
 
-/* ─── MAP ───────────────────────────────────── */
-.map-section {
-  background: var(--clay);
-  padding: 0;
-}
-.map-header {
-  padding: 4rem 5% 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-.map-header h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 300;
-  color: var(--cream);
-  letter-spacing: -0.02em;
-}
-.map-header h2 em { font-style:italic; color:var(--accent2) }
-.route-stats {
-  display: flex;
-  gap: 2.5rem;
-}
-.r-stat {}
-.r-stat-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--accent2);
-  line-height: 1;
-}
-.r-stat-lbl {
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--stone);
-  margin-top: 0.2rem;
-}
-.map-embed {
-  width: 100%;
-  height: 480px;
-  position: relative;
-}
-.map-embed iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  opacity: 0.9;
+/* Day 2 — N-260 green mountain day */
+.scene-n260 {
+  background:linear-gradient(180deg,
+    #4A7BA6 0%, #6A9FBF 18%, #8FBCD4 30%,
+    #BDD4C8 42%, #6B8C5C 52%, #4A6640 65%,
+    #3A5030 78%, #2A3C22 100%
+  );
 }
 
-/* ─── ITINERARY ─────────────────────────────── */
-.itinerary-section {
-  background: var(--white);
+/* Day 3 — Tourmalet dramatic blue/grey */
+.scene-tourmalet {
+  background:linear-gradient(180deg,
+    #1A2A3D 0%, #2C4060 15%, #4A6080 28%,
+    #7A9CB0 38%, #B0C4CF 46%,
+    #8A9A80 55%, #6A7A60 65%,
+    #4A5A40 78%, #2A3A28 100%
+  );
+}
+.scene-tourmalet::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 70% 50% at 30% 30%, rgba(200,220,240,0.2) 0%, transparent 60%);
 }
 
-/* day layout alternates */
-.day-entry {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 480px;
-  border-bottom: 1px solid var(--rule);
+/* Day 4 — Picos green north */
+.scene-picos {
+  background:linear-gradient(180deg,
+    #2A4A5A 0%, #3A6878 15%, #6A9AA8 28%,
+    #9AC0B0 38%, #7AB098 48%,
+    #4A7A5C 58%, #2A5A3C 72%,
+    #1A3A28 100%
+  );
 }
-.day-entry:last-child { border-bottom: none }
-.day-entry.reverse { direction: rtl }
-.day-entry.reverse > * { direction: ltr }
 
-.day-photo {
-  position: relative;
-  overflow: hidden;
-  background: var(--earth);
+/* Day 5 — Return golden hour */
+.scene-return {
+  background:linear-gradient(180deg,
+    #3D2C1A 0%, #8B5A2A 20%, #D4904A 38%,
+    #E8B060 48%, #C48040 58%,
+    #8B5A30 70%, #5C3820 84%, #3A2418 100%
+  );
 }
-.day-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.88;
-  transition: transform 0.8s ease, opacity 0.4s ease;
+.scene-return::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 60% 40% at 55% 40%, rgba(255,200,80,0.4) 0%, transparent 60%);
 }
-.day-entry:hover .day-photo img {
-  transform: scale(1.03);
-  opacity: 1;
+
+/* Mountain silhouettes via SVG filter */
+.mtn-layer { position:absolute; bottom:0; left:0; right:0 }
+
+/* Road curve */
+.road-curve {
+  position:absolute; bottom:0; left:0; right:0; height:45%;
+  opacity:0.12;
 }
-.day-photo-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg,
-    rgba(44,35,24,0.35) 0%,
-    rgba(44,35,24,0.0) 60%);
-  pointer-events: none;
-}
+
+/* ─── SECTION ────────────────────────────── */
+.section { padding:6rem 5% }
+.section-inner { max-width:1200px; margin:0 auto }
+.eyebrow { font-size:0.63rem; font-weight:600; letter-spacing:0.28em; text-transform:uppercase; color:var(--accent) }
+.section-header { margin-bottom:4rem }
+.section-header .eyebrow { margin-bottom:0.9rem }
+.section-header h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,5vw,4rem); font-weight:300; line-height:1.1; letter-spacing:-0.02em }
+
+/* ─── MAP ─────────────────────────────────── */
+.map-section { background:var(--clay); padding:0 }
+.map-header { padding:3.5rem 5% 2.5rem; max-width:1200px; margin:0 auto; display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; flex-wrap:wrap }
+.map-header-left .eyebrow { color:var(--amber); margin-bottom:0.75rem }
+.map-header-left h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:300; color:var(--cream); letter-spacing:-0.02em }
+.map-header-left h2 em { font-style:italic; color:var(--amber) }
+.route-stats { display:flex; gap:2.5rem }
+.r-stat-num { font-family:'Cormorant Garamond',serif; font-size:1.9rem; font-weight:600; color:var(--amber); line-height:1 }
+.r-stat-lbl { font-size:0.58rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--stone); margin-top:0.2rem }
+#map { width:100%; height:500px }
+/* Leaflet dark style overlay */
+.leaflet-tile { filter:saturate(0.8) brightness(0.9) }
+
+/* ─── DAYS ────────────────────────────────── */
+.itinerary-section { background:var(--white); padding:0 }
+.day-entry { display:grid; grid-template-columns:1fr 1fr; min-height:500px; border-bottom:1px solid var(--rule) }
+.day-entry:last-child { border-bottom:none }
+.day-entry.reverse { direction:rtl }
+.day-entry.reverse > * { direction:ltr }
+
+.day-visual { position:relative; overflow:hidden; min-height:400px }
+.day-visual-scene { position:absolute; inset:0 }
+.day-visual-overlay { position:absolute; inset:0; background:linear-gradient(135deg, rgba(44,35,24,0.3) 0%, transparent 60%) }
 .day-photo-number {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  color: rgba(244,239,230,0.9);
-  background: rgba(44,35,24,0.55);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(244,239,230,0.15);
-  padding: 0.35rem 0.8rem;
-  border-radius: 1px;
+  position:absolute; top:2rem; left:2rem; z-index:2;
+  font-family:'Cormorant Garamond',serif; font-size:0.78rem; font-weight:600; letter-spacing:0.22em;
+  color:rgba(244,239,230,0.9); background:rgba(44,35,24,0.55); backdrop-filter:blur(6px);
+  border:1px solid rgba(244,239,230,0.15); padding:0.35rem 0.8rem; border-radius:1px;
 }
-.day-photo-location {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(244,239,230,0.65);
+.day-location-tag {
+  position:absolute; bottom:1.5rem; left:1.5rem; z-index:2;
+  font-size:0.63rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase;
+  color:rgba(244,239,230,0.7);
+}
+.day-elevation {
+  position:absolute; bottom:1.5rem; right:1.5rem; z-index:2;
+  font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600;
+  color:rgba(244,239,230,0.6); line-height:1;
 }
 
-.day-text {
-  padding: 3.5rem 3.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: var(--white);
-}
-.day-weekday {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.5rem;
-}
-.day-distance {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.9rem;
-  color: var(--stone);
-  letter-spacing: 0.08em;
-  margin-bottom: 1.25rem;
-}
-.day-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
-  font-weight: 400;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  color: var(--clay);
-  margin-bottom: 1.25rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--rule);
-}
-.day-desc {
-  font-size: 0.96rem;
-  line-height: 1.82;
-  color: var(--khaki);
-  font-weight: 300;
-  margin-bottom: 1.5rem;
-}
-.day-desc strong {
-  font-weight: 600;
-  color: var(--clay);
-}
-.day-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-.tag {
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 0.3rem 0.7rem;
-  border-radius: 1px;
-  border: 1px solid;
-}
-.tag-road { color: var(--accent); border-color: rgba(160,82,45,0.3); background: rgba(160,82,45,0.05) }
-.tag-mtn  { color: var(--sky);    border-color: rgba(91,127,166,0.3); background: rgba(91,127,166,0.05) }
-.tag-city { color: var(--forest); border-color: rgba(58,92,58,0.3);   background: rgba(58,92,58,0.05) }
-.tag-fuel { color: #7A6010;       border-color: rgba(122,96,16,0.3);  background: rgba(122,96,16,0.05) }
-.tag-epic { background: var(--accent); color: white; border-color: var(--accent) }
+.day-text { padding:3.5rem; display:flex; flex-direction:column; justify-content:center; background:var(--white) }
+.day-weekday { font-size:0.63rem; font-weight:600; letter-spacing:0.28em; text-transform:uppercase; color:var(--accent); margin-bottom:0.45rem }
+.day-distance { font-family:'Cormorant Garamond',serif; font-size:0.88rem; color:var(--stone); letter-spacing:0.08em; margin-bottom:1.2rem }
+.day-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,2.2vw,2rem); font-weight:400; line-height:1.25; letter-spacing:-0.01em; color:var(--clay); margin-bottom:1.2rem; padding-bottom:1.2rem; border-bottom:1px solid var(--rule) }
+.day-desc { font-size:0.96rem; line-height:1.85; color:var(--khaki); font-weight:300; margin-bottom:1.4rem }
+.day-desc strong { font-weight:600; color:var(--clay) }
+.day-tags { display:flex; flex-wrap:wrap; gap:0.4rem }
+.tag { font-size:0.58rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; padding:0.28rem 0.7rem; border-radius:1px; border:1px solid }
+.tag-road  { color:var(--accent); border-color:rgba(160,82,45,0.3); background:rgba(160,82,45,0.05) }
+.tag-mtn   { color:var(--sky);    border-color:rgba(91,127,166,0.3); background:rgba(91,127,166,0.05) }
+.tag-city  { color:var(--forest); border-color:rgba(58,92,58,0.3);   background:rgba(58,92,58,0.05) }
+.tag-fuel  { color:#7A6010;       border-color:rgba(122,96,16,0.3);  background:rgba(122,96,16,0.05) }
+.tag-epic  { background:var(--accent); color:white; border-color:var(--accent) }
 
-/* ─── EDITORIAL BREAK ───────────────────────── */
+/* ─── EDITORIAL BREAK ────────────────────── */
 .editorial-break {
-  height: 60vh;
-  min-height: 360px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height:55vh; min-height:340px; position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
 }
-.editorial-break-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-}
-.editorial-break-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(20,14,8,0.62);
-}
-.editorial-break-text {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 0 5%;
-}
-.editorial-break-text .eyebrow { color: var(--accent2); margin-bottom: 1.2rem }
-.editorial-break-text h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.5rem, 6vw, 5.5rem);
-  font-weight: 300;
-  color: var(--cream);
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-.editorial-break-text h3 em { font-style:italic; color:var(--accent2) }
+.editorial-break-scene { position:absolute; inset:0 }
+.editorial-break-overlay { position:absolute; inset:0; background:rgba(15,10,5,0.58) }
+.editorial-break-text { position:relative; z-index:2; text-align:center; padding:0 5% }
+.editorial-break-text .eyebrow { color:var(--amber); margin-bottom:1.1rem }
+.editorial-break-text h3 { font-family:'Cormorant Garamond',serif; font-size:clamp(2.5rem,6vw,5.5rem); font-weight:300; color:var(--cream); letter-spacing:-0.02em; line-height:1.05 }
+.editorial-break-text h3 em { font-style:italic; color:var(--amber) }
 
-/* ─── HOTELS ────────────────────────────────── */
-.hotels-section { background: var(--cream) }
-.hotel-location {
-  margin-bottom: 4rem;
-}
-.hotel-location:last-child { margin-bottom: 0 }
-.hotel-location-header {
-  display: flex;
-  align-items: baseline;
-  gap: 1.5rem;
-  margin-bottom: 1.75rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--rule);
-}
-.hotel-location-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem;
-  font-weight: 400;
-  color: var(--clay);
-}
-.hotel-location-night {
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--stone);
-}
-.hotels-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-}
-.hotel-card {
-  background: var(--white);
-  border: 1px solid rgba(44,35,24,0.1);
-  border-radius: 2px;
-  overflow: hidden;
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-}
-.hotel-card:hover {
-  box-shadow: 0 8px 32px rgba(44,35,24,0.1);
-  transform: translateY(-3px);
-}
-.hotel-card-accent { height: 3px }
-.hotel-card-body { padding: 1.5rem }
-.hotel-tier {
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--stone);
-  margin-bottom: 0.4rem;
-}
-.hotel-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--clay);
-  margin-bottom: 0.6rem;
-  line-height: 1.2;
-}
-.hotel-desc {
-  font-size: 0.87rem;
-  line-height: 1.68;
-  color: var(--khaki);
-  font-weight: 300;
-  margin-bottom: 1rem;
-}
-.hotel-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 1.25rem;
-}
-.chip {
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  padding: 0.22rem 0.6rem;
-  border-radius: 1px;
-  background: var(--cream);
-  color: var(--khaki);
-  border: 1px solid rgba(44,35,24,0.1);
-}
-.chip.green { background: rgba(58,92,58,0.06); color: var(--forest); border-color: rgba(58,92,58,0.2) }
-.hotel-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 1rem;
-  border-top: 1px solid var(--rule);
-}
-.hotel-price {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--clay);
-}
-.hotel-price span {
-  font-family: 'Jost', sans-serif;
-  font-size: 0.72rem;
-  font-weight: 300;
-  color: var(--stone);
-}
-.book-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--clay);
-  color: var(--sand);
-  padding: 0.6rem 1.2rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  border-radius: 1px;
-  transition: background 0.2s;
-}
-.book-btn:hover { background: var(--accent) }
-.book-btn::after { content: '→'; font-size: 0.8rem }
+/* ─── HOTELS ──────────────────────────────── */
+.hotels-section { background:var(--cream) }
+.hotel-location { margin-bottom:3.5rem }
+.hotel-location:last-child { margin-bottom:0 }
+.hotel-location-header { display:flex; align-items:baseline; gap:1.5rem; margin-bottom:1.5rem; padding-bottom:0.9rem; border-bottom:1px solid var(--rule) }
+.hotel-location-name { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:400; color:var(--clay) }
+.hotel-location-night { font-size:0.6rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--stone) }
+.hotels-row { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem }
+.hotel-card { background:var(--white); border:1px solid rgba(44,35,24,0.1); border-radius:2px; overflow:hidden; transition:box-shadow 0.25s,transform 0.25s }
+.hotel-card:hover { box-shadow:0 8px 30px rgba(44,35,24,0.1); transform:translateY(-3px) }
+.hotel-card-accent { height:3px }
+.hotel-card-body { padding:1.5rem }
+.hotel-tier { font-size:0.57rem; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--stone); margin-bottom:0.4rem }
+.hotel-name { font-family:'Cormorant Garamond',serif; font-size:1.22rem; font-weight:600; color:var(--clay); margin-bottom:0.55rem; line-height:1.2 }
+.hotel-desc { font-size:0.86rem; line-height:1.7; color:var(--khaki); font-weight:300; margin-bottom:0.9rem }
+.hotel-chips { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.2rem }
+.chip { font-size:0.6rem; font-weight:500; letter-spacing:0.1em; padding:0.22rem 0.6rem; border-radius:1px; background:var(--cream); color:var(--khaki); border:1px solid rgba(44,35,24,0.1) }
+.chip.hi { background:rgba(58,92,58,0.07); color:var(--forest); border-color:rgba(58,92,58,0.2) }
+.hotel-footer { display:flex; align-items:center; justify-content:space-between; padding-top:1rem; border-top:1px solid var(--rule) }
+.hotel-price { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:var(--clay) }
+.hotel-price span { font-family:'Jost',sans-serif; font-size:0.7rem; font-weight:300; color:var(--stone) }
+.book-btn { display:inline-flex; align-items:center; gap:0.5rem; background:var(--clay); color:var(--sand); padding:0.6rem 1.2rem; font-size:0.68rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; border-radius:1px; transition:background 0.2s }
+.book-btn:hover { background:var(--accent) }
+.book-btn::after { content:'→' }
 
-/* ─── COSTS ─────────────────────────────────── */
-.costs-section { background: var(--clay) }
-.costs-section .section-header h2 { color: var(--cream) }
-.costs-section .section-header .eyebrow { color: var(--accent2) }
-.costs-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(200,184,154,0.08);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-}
-.cost-card {
-  background: rgba(61,48,32,0.6);
-  padding: 2rem 1.75rem;
-  border: none;
-}
-.cost-card:hover { background: rgba(61,48,32,0.9) }
-.cost-emoji { font-size: 1.5rem; margin-bottom: 1rem; opacity: 0.85 }
-.cost-cat {
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--stone);
-  margin-bottom: 0.5rem;
-}
-.cost-val {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: var(--sand);
-  line-height: 1;
-  margin-bottom: 0.4rem;
-}
-.cost-note { font-size: 0.78rem; color: var(--stone); font-weight: 300; line-height: 1.4 }
-.cost-total {
-  background: var(--accent);
-  border-radius: 2px;
-  padding: 2rem 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.cost-total-label {
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(244,239,230,0.7);
-}
-.cost-total-val {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 3.5rem;
-  font-weight: 600;
-  color: white;
-  line-height: 1;
-}
-.cost-note-global {
-  margin-top: 1.5rem;
-  font-size: 0.78rem;
-  color: var(--stone);
-  line-height: 1.8;
-}
-.cost-note-global a { color: var(--accent2); text-decoration: underline }
+/* ─── COSTS ───────────────────────────────── */
+.costs-section { background:var(--clay) }
+.costs-section .section-header h2 { color:var(--cream) }
+.costs-section .section-header .eyebrow { color:var(--amber) }
+.costs-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(200,184,154,0.07); border-radius:2px; overflow:hidden; margin-bottom:1.5rem }
+.cost-card { background:rgba(61,48,32,0.55); padding:2rem 1.75rem; transition:background 0.2s }
+.cost-card:hover { background:rgba(61,48,32,0.9) }
+.cost-emoji { font-size:1.4rem; margin-bottom:0.9rem; opacity:0.85 }
+.cost-cat { font-size:0.58rem; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--stone); margin-bottom:0.45rem }
+.cost-val { font-family:'Cormorant Garamond',serif; font-size:2.3rem; font-weight:600; color:var(--sand); line-height:1; margin-bottom:0.35rem }
+.cost-note { font-size:0.78rem; color:var(--stone); font-weight:300; line-height:1.45 }
+.cost-total { background:var(--accent); border-radius:2px; padding:2rem 2.5rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap }
+.cost-total-label { font-size:0.66rem; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:rgba(244,239,230,0.7) }
+.cost-total-val { font-family:'Cormorant Garamond',serif; font-size:3.5rem; font-weight:600; color:white; line-height:1 }
+.cost-disclaimer { margin-top:1.5rem; font-size:0.78rem; color:var(--stone); line-height:1.8 }
 
-/* ─── TIPS ──────────────────────────────────── */
-.tips-section { background: var(--parch) }
-.tips-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-.tip-card {
-  border-top: 2px solid;
-  padding: 1.75rem 0 0;
-}
-.tip-card:nth-child(1) { border-color: var(--accent) }
-.tip-card:nth-child(2) { border-color: var(--forest) }
-.tip-card:nth-child(3) { border-color: var(--sky) }
-.tip-card:nth-child(4) { border-color: var(--accent2) }
-.tip-card:nth-child(5) { border-color: var(--stone) }
-.tip-card:nth-child(6) { border-color: var(--accent) }
-.tip-icon { font-size: 1.4rem; margin-bottom: 1rem }
-.tip-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--clay);
-  margin-bottom: 0.6rem;
-}
-.tip-text { font-size: 0.88rem; line-height: 1.75; color: var(--khaki); font-weight: 300 }
+/* ─── TIPS ────────────────────────────────── */
+.tips-section { background:var(--parch) }
+.tips-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem }
+.tip-card { border-top:2px solid; padding:1.75rem 0 0 }
+.tip-card:nth-child(1){border-color:var(--accent)}
+.tip-card:nth-child(2){border-color:var(--forest)}
+.tip-card:nth-child(3){border-color:var(--sky)}
+.tip-card:nth-child(4){border-color:var(--amber)}
+.tip-card:nth-child(5){border-color:var(--stone)}
+.tip-card:nth-child(6){border-color:var(--accent)}
+.tip-icon { font-size:1.4rem; margin-bottom:0.9rem }
+.tip-title { font-family:'Cormorant Garamond',serif; font-size:1.15rem; font-weight:600; color:var(--clay); margin-bottom:0.55rem }
+.tip-text { font-size:0.88rem; line-height:1.75; color:var(--khaki); font-weight:300 }
 
-/* ─── FOOTER ────────────────────────────────── */
-.footer {
-  background: var(--clay);
-  border-top: 1px solid rgba(200,184,154,0.08);
-  padding: 3rem 5%;
-}
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.footer-brand {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-style: italic;
-  color: var(--sand);
-}
-.footer-route {
-  font-size: 0.65rem;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  color: var(--stone);
-  text-transform: uppercase;
-  text-align: right;
-}
+/* ─── FOOTER ──────────────────────────────── */
+footer { background:var(--clay); border-top:1px solid rgba(200,184,154,0.07); padding:3rem 5% }
+.footer-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap }
+.footer-brand { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--sand) }
+.footer-note { font-size:0.63rem; font-weight:400; letter-spacing:0.12em; color:var(--stone); text-transform:uppercase; text-align:right }
 
-/* ─── REVEAL ────────────────────────────────── */
-.reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.65s ease, transform 0.65s ease;
-}
-.reveal.visible { opacity: 1; transform: none }
+/* ─── REVEAL ──────────────────────────────── */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity 0.65s ease,transform 0.65s ease }
+.reveal.visible { opacity:1; transform:none }
 
-/* ─── RESPONSIVE ────────────────────────────── */
-@media (max-width: 900px) {
-  .day-entry, .day-entry.reverse { grid-template-columns: 1fr; direction: ltr }
-  .day-photo { height: 320px }
-  .hotels-row { grid-template-columns: 1fr }
-  .costs-grid { grid-template-columns: repeat(2, 1fr) }
-  .tips-grid { grid-template-columns: repeat(2, 1fr) }
-  .route-stats { flex-wrap: wrap; gap: 1.5rem }
-  .nav-links { display: none }
+/* ─── RESPONSIVE ──────────────────────────── */
+@media(max-width:900px){
+  .day-entry,.day-entry.reverse{grid-template-columns:1fr;direction:ltr}
+  .day-visual{min-height:300px}
+  .hotels-row{grid-template-columns:1fr}
+  .costs-grid{grid-template-columns:repeat(2,1fr)}
+  .tips-grid{grid-template-columns:repeat(2,1fr)}
+  .nav-links{display:none}
+  .route-stats{flex-wrap:wrap;gap:1.5rem}
+  .hero-meta{flex-wrap:wrap}
 }
-@media (max-width: 580px) {
-  .costs-grid { grid-template-columns: 1fr }
-  .tips-grid { grid-template-columns: 1fr }
-  .hero-meta { flex-wrap: wrap }
+@media(max-width:580px){
+  .costs-grid{grid-template-columns:1fr}
+  .tips-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -713,7 +354,7 @@ a { text-decoration:none; color:inherit }
 
 <!-- NAV -->
 <nav class="nav">
-  <div class="nav-brand">Pirenéus <span>'25</span></div>
+  <div class="nav-brand">Pirenéus <em>'25</em></div>
   <ul class="nav-links">
     <li><a href="#rota">Rota</a></li>
     <li><a href="#dias">Itinerário</a></li>
@@ -725,7 +366,29 @@ a { text-decoration:none; color:inherit }
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-img"></div>
+  <div class="hero-sky"></div>
+
+  <!-- SVG Mountain Silhouettes -->
+  <div class="hero-mountains">
+    <svg viewBox="0 0 1440 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;bottom:0">
+      <!-- Far mountains -->
+      <polygon points="0,600 0,320 120,200 240,280 360,160 480,240 600,100 720,200 840,140 960,220 1080,80 1200,180 1320,120 1440,200 1440,600" fill="rgba(60,50,80,0.6)"/>
+      <!-- Mid mountains -->
+      <polygon points="0,600 0,380 80,300 180,360 300,260 420,340 520,220 640,310 760,250 880,320 1000,200 1120,290 1240,230 1360,300 1440,260 1440,600" fill="rgba(50,70,60,0.7)"/>
+      <!-- Near mountains - main range -->
+      <polygon points="0,600 0,440 60,400 140,460 240,360 360,430 460,340 560,420 680,300 780,400 900,330 1020,420 1140,360 1260,440 1380,380 1440,420 1440,600" fill="rgba(44,58,44,0.85)"/>
+      <!-- Foreground terrain -->
+      <polygon points="0,600 0,520 100,500 200,520 350,490 500,515 650,495 800,515 950,500 1100,520 1250,505 1440,515 1440,600" fill="rgba(30,40,25,0.95)"/>
+      <!-- Road winding through mountains -->
+      <path d="M720,580 Q650,540 580,500 Q520,470 480,440 Q440,410 420,380 Q400,350 380,320" stroke="rgba(200,184,154,0.25)" stroke-width="3" fill="none" stroke-dasharray="8,6"/>
+      <!-- Sun/glow -->
+      <circle cx="1050" cy="160" r="45" fill="rgba(255,200,80,0.35)"/>
+      <circle cx="1050" cy="160" r="80" fill="rgba(255,180,60,0.12)"/>
+    </svg>
+  </div>
+
+  <div class="hero-gradient"></div>
+
   <div class="hero-content">
     <div class="hero-eyebrow">Rota de Mota · Portugal — Pirenéus — Portugal</div>
     <h1 class="hero-h1">
@@ -758,12 +421,12 @@ a { text-decoration:none; color:inherit }
   </div>
 </section>
 
-<!-- MAP -->
+<!-- MAP — Leaflet.js (works everywhere, no API key) -->
 <section class="map-section" id="rota">
   <div class="map-header">
-    <div>
-      <div class="eyebrow" style="color:var(--accent2);margin-bottom:0.75rem">O Percurso</div>
-      <h2>O Percurso <em>Completo</em></h2>
+    <div class="map-header-left">
+      <div class="eyebrow" style="color:var(--amber)">O Percurso</div>
+      <h2>A Rota <em>Completa</em></h2>
     </div>
     <div class="route-stats">
       <div class="r-stat">
@@ -776,33 +439,44 @@ a { text-decoration:none; color:inherit }
       </div>
       <div class="r-stat">
         <div class="r-stat-num">2</div>
-        <div class="r-stat-lbl">Dias nos Pirenéus</div>
+        <div class="r-stat-lbl">Dias Pirenéus</div>
       </div>
     </div>
   </div>
-  <div class="map-embed">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m76!1m12!1m3!1d3788284.8!2d-4.2!3d42.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m61!3e0!4m5!1s0xd3918bf7c2e4b9d%3A0xee4ab18820b19b1f!2sMirandela%2C+Portugal!3m2!1d41.4853!2d-7.1808!4m5!1s0xd5914000d4ab7a3%3A0x49c87a2eef28e8a8!2sZaragoza%2C+Spain!3m2!1d41.6474!2d-0.8861!4m5!1s0x12a4cf5f8a7e74d1%3A0xfe8a9ba27ac40000!2sJaca%2C+Spain!3m2!1d42.5717!2d-0.547!4m5!1s0x12a4604ccddd3765%3A0xa00780001fa0000!2sAndorra+la+Vella!3m2!1d42.5063!2d1.5218!4m5!1s0x12aef5e8cd68c9a9%3A0x3bb44ab3e2161a68!2sCol+du+Tourmalet!3m2!1d42.9081!2d0.1452!4m5!1s0x12ae8e0a61b995b3%3A0xc8b98b011440563a!2sCol+d%27Aubisque!3m2!1d42.9765!2d-0.3396!4m5!1s0x12a50d05d4ae7c85%3A0x4e7b19e2e74a3510!2sPamplona%2C+Spain!3m2!1d42.8125!2d-1.6457!4m5!1s0x12b6dd2a36b11dd7%3A0x46bbfbc54568b!2sPicos+de+Europa!3m2!1d43.175!2d-4.85!4m5!1s0xd3918bf7c2e4b9d%3A0xee4ab18820b19b1f!2sMirandela%2C+Portugal!3m2!1d41.4853!2d-7.1808!5e0!3m2!1spt!2spt!4v1683800000000" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-  </div>
+  <div id="map"></div>
 </section>
 
 <!-- DAYS -->
 <section class="itinerary-section" id="dias">
 
-  <!-- DAY 1 -->
+  <!-- DAY 1 — Zaragoza -->
   <div class="day-entry">
-    <div class="day-photo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Zaragoza_-_Bas%C3%ADlica_del_Pilar_y_r%C3%ADo_Ebro.jpg/1280px-Zaragoza_-_Bas%C3%ADlica_del_Pilar_y_r%C3%ADo_Ebro.jpg"
-           alt="Zaragoza Basílica del Pilar"
-           onerror="this.parentElement.style.background='#3D3020'">
-      <div class="day-photo-overlay"></div>
+    <div class="day-visual">
+      <div class="day-visual-scene scene-zaragoza"></div>
+      <!-- SVG Zaragoza skyline silhouette -->
+      <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;height:60%" viewBox="0 0 800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Basilica domes silhouette -->
+        <rect x="50" y="120" width="700" height="180" fill="rgba(20,14,8,0.8)"/>
+        <ellipse cx="200" cy="120" rx="35" ry="50" fill="rgba(20,14,8,0.85)"/>
+        <ellipse cx="280" cy="130" rx="25" ry="38" fill="rgba(20,14,8,0.85)"/>
+        <ellipse cx="520" cy="115" rx="35" ry="55" fill="rgba(20,14,8,0.85)"/>
+        <ellipse cx="600" cy="125" rx="25" ry="40" fill="rgba(20,14,8,0.85)"/>
+        <rect x="185" y="60" width="30" height="65" fill="rgba(20,14,8,0.85)"/>
+        <rect x="505" y="55" width="30" height="65" fill="rgba(20,14,8,0.85)"/>
+        <polygon points="180,65 215,40 250,65" fill="rgba(20,14,8,0.85)"/>
+        <polygon points="500,60 535,35 570,60" fill="rgba(20,14,8,0.85)"/>
+        <!-- River reflection -->
+        <rect x="0" y="260" width="800" height="40" fill="rgba(180,140,80,0.15)"/>
+      </svg>
+      <div class="day-visual-overlay"></div>
       <div class="day-photo-number">DIA 01 · QUARTA</div>
-      <div class="day-photo-location">Zaragoza, Espanha</div>
+      <div class="day-location-tag">Zaragoza, Espanha</div>
     </div>
     <div class="day-text reveal">
       <div class="day-weekday">Quarta-Feira · Dia 1</div>
       <div class="day-distance">~490 km · A-62 e A-2</div>
       <div class="day-title">Mirandela → Zaragoza</div>
-      <p class="day-desc">O dia de aceleração. Partida cedo de Mirandela, atravessa a fronteira para Espanha pelo A-62 e segue pelo A-2 direto a Zaragoza. A cidade surpreende: a <strong>Basílica del Pilar</strong> ao longo do Rio Ebro é um dos panoramas mais dramáticos do interior espanhol. Chega a meio da tarde, estica as pernas e guarda as energias. O espetáculo começa amanhã.</p>
+      <p class="day-desc">O dia de aquecimento. Partida cedo de Mirandela, atravessa a fronteira para Espanha pelo A-62 e segue pelo A-2 direto a Zaragoza. A cidade surpreende pela escala: a <strong>Basílica del Pilar</strong> ao longo do Rio Ebro é um dos panoramas mais dramáticos do interior espanhol. Chega a meio da tarde, estica as pernas e guarda as energias. O espetáculo começa amanhã.</p>
       <div class="day-tags">
         <span class="tag tag-road">A-62 · A-2</span>
         <span class="tag tag-city">Zaragoza</span>
@@ -811,21 +485,37 @@ a { text-decoration:none; color:inherit }
     </div>
   </div>
 
-  <!-- DAY 2 -->
+  <!-- DAY 2 — N-260 -->
   <div class="day-entry reverse">
-    <div class="day-photo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Spain._Pyrenees._Road_N-260.jpg/1280px-Spain._Pyrenees._Road_N-260.jpg"
-           alt="N-260 Pirenéus Espanhóis"
-           onerror="this.parentElement.style.background='#2D4A2A'">
-      <div class="day-photo-overlay"></div>
+    <div class="day-visual">
+      <div class="day-visual-scene scene-n260"></div>
+      <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;height:70%" viewBox="0 0 800 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Mountain range -->
+        <polygon points="0,320 0,200 80,150 160,200 260,100 360,170 460,80 560,150 660,110 760,160 800,140 800,320" fill="rgba(42,65,42,0.9)"/>
+        <polygon points="0,320 0,240 100,210 200,240 330,190 460,230 580,200 700,230 800,210 800,320" fill="rgba(25,40,25,0.95)"/>
+        <!-- N-260 road winding -->
+        <path d="M0,300 Q100,280 180,260 Q240,245 280,230 Q320,215 350,195 Q380,175 400,155" stroke="rgba(200,180,140,0.5)" stroke-width="4" fill="none"/>
+        <!-- Hairpin curves -->
+        <path d="M350,195 Q370,185 380,170 Q385,155 370,148 Q355,142 340,152 Q325,162 330,178" stroke="rgba(200,180,140,0.4)" stroke-width="3" fill="none"/>
+        <!-- Pine trees -->
+        <g fill="rgba(20,35,20,0.9)">
+          <polygon points="100,240 112,200 124,240"/>
+          <polygon points="140,235 152,198 164,235"/>
+          <polygon points="600,225 612,188 624,225"/>
+          <polygon points="640,230 652,190 664,230"/>
+          <polygon points="680,222 692,185 704,222"/>
+        </g>
+      </svg>
+      <div class="day-visual-overlay"></div>
       <div class="day-photo-number">DIA 02 · QUINTA</div>
-      <div class="day-photo-location">N-260 · Pirenéus Espanhóis</div>
+      <div class="day-location-tag">N-260 · Pirenéus Espanhóis</div>
+      <div class="day-elevation">2.408m</div>
     </div>
     <div class="day-text reveal">
       <div class="day-weekday">Quinta-Feira · Dia 2</div>
       <div class="day-distance">~330 km · N-260 → Envalira</div>
       <div class="day-title">Zaragoza → Jaca → N-260 → Andorra la Vella</div>
-      <p class="day-desc">Aqui começa o verdadeiro propósito da viagem. Paragem em <strong>Jaca</strong> para café numa vila medieval perfeitamente preservada. Depois embarcas na <strong>N-260</strong> — uma candidata permanente às melhores estradas de mota do mundo. Cânions de calcário, curvas encadeadas, aldeias escondidas. O dia termina em Andorra la Vella pelo Porto de Envalira a <strong>2.408m</strong> — o mais alto dos Pirenéus. Enche o depósito: o combustível em Andorra é significativamente mais barato.</p>
+      <p class="day-desc">Aqui começa o verdadeiro propósito da viagem. Paragem em <strong>Jaca</strong> para café numa vila medieval perfeitamente preservada. Depois embarcas na <strong>N-260</strong> — candidata permanente às melhores estradas de mota do mundo. Cânions de calcário, curvas encadeadas, aldeias escondidas. O dia termina em Andorra la Vella pelo Porto de Envalira a <strong>2.408m</strong> — o mais alto dos Pirenéus. Enche o depósito: o combustível em Andorra é significativamente mais barato.</p>
       <div class="day-tags">
         <span class="tag tag-epic">N-260 Lendária</span>
         <span class="tag tag-mtn">Envalira 2.408m</span>
@@ -837,7 +527,18 @@ a { text-decoration:none; color:inherit }
 
   <!-- EDITORIAL BREAK -->
   <div class="editorial-break">
-    <div class="editorial-break-bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Col_du_Tourmalet_-_route.jpg/1280px-Col_du_Tourmalet_-_route.jpg')"></div>
+    <div class="editorial-break-scene">
+      <!-- Dramatic Tourmalet scene -->
+      <div style="width:100%;height:100%;background:linear-gradient(180deg,#0A1520 0%,#1A2A3D 15%,#2C4060 28%,#4A6080 38%,#8AACB8 46%,#7A9880 55%,#506050 68%,#2A3828 85%,#18251A 100%)"></div>
+      <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;height:80%" viewBox="0 0 1440 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0,400 0,250 100,180 200,240 350,100 500,200 650,80 800,180 950,60 1100,160 1250,90 1350,150 1440,120 1440,400" fill="rgba(30,44,30,0.92)"/>
+        <polygon points="0,400 0,310 120,280 260,310 400,260 560,300 720,260 880,295 1040,262 1200,295 1440,270 1440,400" fill="rgba(18,28,18,0.97)"/>
+        <!-- Snow caps -->
+        <polygon points="350,100 380,130 320,130" fill="rgba(220,230,235,0.5)"/>
+        <polygon points="650,80 685,115 615,115" fill="rgba(220,230,235,0.55)"/>
+        <polygon points="950,60 990,100 910,100" fill="rgba(220,230,235,0.6)"/>
+      </svg>
+    </div>
     <div class="editorial-break-overlay"></div>
     <div class="editorial-break-text">
       <div class="eyebrow">Os Grandes Portos de Montanha</div>
@@ -845,21 +546,30 @@ a { text-decoration:none; color:inherit }
     </div>
   </div>
 
-  <!-- DAY 3 -->
+  <!-- DAY 3 — Tourmalet -->
   <div class="day-entry">
-    <div class="day-photo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Col_du_Tourmalet_-_vue_g%C3%A9n%C3%A9rale.jpg/1280px-Col_du_Tourmalet_-_vue_g%C3%A9n%C3%A9rale.jpg"
-           alt="Col du Tourmalet"
-           onerror="this.parentElement.style.background='#1B3A5C'">
-      <div class="day-photo-overlay"></div>
+    <div class="day-visual">
+      <div class="day-visual-scene scene-tourmalet"></div>
+      <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;height:75%" viewBox="0 0 800 340" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Dramatic peaks -->
+        <polygon points="0,340 0,200 60,160 140,200 240,100 320,170 420,60 500,140 600,90 700,160 800,110 800,340" fill="rgba(35,48,35,0.88)"/>
+        <polygon points="0,340 0,260 100,235 200,258 320,220 440,252 560,228 680,250 800,235 800,340" fill="rgba(18,28,18,0.96)"/>
+        <!-- Snow patches -->
+        <ellipse cx="420" cy="68" rx="20" ry="12" fill="rgba(230,238,245,0.55)"/>
+        <ellipse cx="600" cy="98" rx="15" ry="9" fill="rgba(230,238,245,0.5)"/>
+        <!-- Tour de France road markers -->
+        <path d="M0,330 Q150,310 260,290 Q340,275 390,255 Q420,240 428,220" stroke="rgba(200,180,140,0.45)" stroke-width="3.5" fill="none"/>
+      </svg>
+      <div class="day-visual-overlay"></div>
       <div class="day-photo-number">DIA 03 · SEXTA</div>
-      <div class="day-photo-location">Col du Tourmalet · 2.115m</div>
+      <div class="day-location-tag">Col du Tourmalet · Pirenéus Franceses</div>
+      <div class="day-elevation">2.115m</div>
     </div>
     <div class="day-text reveal">
       <div class="day-weekday">Sexta-Feira · Dia 3</div>
       <div class="day-distance">~280 km · O Dia dos Passes</div>
       <div class="day-title">Andorra → Tourmalet → Col d'Aubisque → Pamplona</div>
-      <p class="day-desc">O dia mais extraordinário da rota. Saída de Andorra pelo lado francês em direção ao <strong>Col du Tourmalet a 2.115m</strong> — imortalizado pelo Tour de France desde 1910, a estrada serpenteia entre cimos pelados e vales profundos. Depois o <strong>Col d'Aubisque a 1.709m</strong>, esculpido na rocha com vistas sobre os Pirenéus que não têm paralelo. Não planeies chegar a uma hora — vais parar frequentemente. O dia termina em <strong>Pamplona</strong>, com pintxos no casco antigo.</p>
+      <p class="day-desc">O dia mais extraordinário da rota. Saída de Andorra pelo lado francês em direção ao <strong>Col du Tourmalet a 2.115m</strong> — imortalizado pelo Tour de France desde 1910, a estrada serpenteia entre cimos pelados e vales profundos. Depois o <strong>Col d'Aubisque a 1.709m</strong>, esculpido na rocha com vistas sobre os Pirenéus que não têm paralelo. Não planeies chegar a uma hora. O dia termina em <strong>Pamplona</strong>, com pintxos no casco antigo.</p>
       <div class="day-tags">
         <span class="tag tag-epic">Tourmalet 2.115m</span>
         <span class="tag tag-mtn">Aubisque 1.709m</span>
@@ -868,15 +578,24 @@ a { text-decoration:none; color:inherit }
     </div>
   </div>
 
-  <!-- DAY 4 -->
+  <!-- DAY 4 — Picos -->
   <div class="day-entry reverse">
-    <div class="day-photo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Picos_de_Europa_desde_el_Mirador_del_Cable_%28Cantabria%29.jpg/1280px-Picos_de_Europa_desde_el_Mirador_del_Cable_%28Cantabria%29.jpg"
-           alt="Picos de Europa"
-           onerror="this.parentElement.style.background='#2D4A2A'">
-      <div class="day-photo-overlay"></div>
+    <div class="day-visual">
+      <div class="day-visual-scene scene-picos"></div>
+      <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;height:72%" viewBox="0 0 800 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Jagged limestone peaks of Picos -->
+        <polygon points="0,320 0,230 50,210 90,240 130,180 180,220 230,140 280,190 340,130 400,180 460,110 520,165 580,125 640,170 700,145 750,180 800,160 800,320" fill="rgba(38,60,38,0.88)"/>
+        <polygon points="0,320 0,275 80,255 200,272 340,248 480,268 620,250 760,265 800,255 800,320" fill="rgba(20,35,20,0.96)"/>
+        <!-- Glacial colour hints -->
+        <ellipse cx="340" cy="135" rx="18" ry="11" fill="rgba(220,235,230,0.45)"/>
+        <ellipse cx="460" cy="115" rx="14" ry="8" fill="rgba(220,235,230,0.4)"/>
+        <!-- Valley mist -->
+        <ellipse cx="400" cy="290" rx="250" ry="30" fill="rgba(160,200,180,0.12)"/>
+      </svg>
+      <div class="day-visual-overlay"></div>
       <div class="day-photo-number">DIA 04 · SÁBADO</div>
-      <div class="day-photo-location">Picos de Europa · Norte de Espanha</div>
+      <div class="day-location-tag">Picos de Europa · Norte de Espanha</div>
+      <div class="day-elevation">2.648m</div>
     </div>
     <div class="day-text reveal">
       <div class="day-weekday">Sábado · Dia 4</div>
@@ -891,25 +610,38 @@ a { text-decoration:none; color:inherit }
     </div>
   </div>
 
-  <!-- DAY 5 -->
+  <!-- DAY 5 — Return -->
   <div class="day-entry">
-    <div class="day-photo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Picos_de_Europa_-_Fuente_D%C3%A9_%28Cantabria%29.jpg/1280px-Picos_de_Europa_-_Fuente_D%C3%A9_%28Cantabria%29.jpg"
-           alt="Fuente De Picos de Europa"
-           onerror="this.parentElement.style.background='#3D3020'">
-      <div class="day-photo-overlay"></div>
+    <div class="day-visual">
+      <div class="day-visual-scene scene-return"></div>
+      <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;height:60%" viewBox="0 0 800 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Salamanca silhouette - cathedral towers -->
+        <rect x="0" y="100" width="800" height="180" fill="rgba(20,12,6,0.85)"/>
+        <!-- Cathedral towers -->
+        <rect x="280" y="20" width="28" height="85" fill="rgba(20,12,6,0.9)"/>
+        <polygon points="280,25 294,5 308,25" fill="rgba(20,12,6,0.9)"/>
+        <rect x="330" y="35" width="22" height="70" fill="rgba(20,12,6,0.9)"/>
+        <polygon points="330,40 341,22 352,40" fill="rgba(20,12,6,0.9)"/>
+        <ellipse cx="294" cy="60" rx="38" ry="22" fill="rgba(20,12,6,0.85)"/>
+        <!-- University tower -->
+        <rect x="480" y="30" width="20" height="75" fill="rgba(20,12,6,0.9)"/>
+        <rect x="470" y="28" width="40" height="8" fill="rgba(20,12,6,0.9)"/>
+        <!-- Golden glow reflection on ground -->
+        <rect x="0" y="240" width="800" height="40" fill="rgba(200,140,40,0.1)"/>
+      </svg>
+      <div class="day-visual-overlay"></div>
       <div class="day-photo-number">DIA 05 · DOMINGO</div>
-      <div class="day-photo-location">Regresso a Casa</div>
+      <div class="day-location-tag">Regresso — Salamanca → Mirandela</div>
     </div>
     <div class="day-text reveal">
       <div class="day-weekday">Domingo · Dia 5</div>
       <div class="day-distance">~430 km · A-67 e A-62</div>
       <div class="day-title">Santander → Salamanca → Mirandela</div>
-      <p class="day-desc">O último troço. De Santander segues pelo A-67 em direção a Valladolid — se o tempo permitir, uma paragem em <strong>Salamanca</strong> vale cada minuto: a cidade universitária com a sua catedral de arenito dourado é um dos conjuntos históricos mais belos da Península. Depois o A-62 de volta a casa. Chegas a Mirandela ao final da tarde com 1.850km nas pernas e um arquivo de memórias que dura uma vida.</p>
+      <p class="day-desc">O último troço. De Santander segues pelo A-67 — se o tempo permitir, uma paragem em <strong>Salamanca</strong> vale cada minuto: a cidade universitária com a sua catedral de arenito dourado é um dos conjuntos históricos mais belos da Península. Depois o A-62 de volta a casa. Chegas a Mirandela ao final da tarde com 1.850km nas pernas e um arquivo de memórias para toda a vida.</p>
       <div class="day-tags">
         <span class="tag tag-road">A-67 · A-62</span>
         <span class="tag tag-city">Salamanca</span>
-        <span class="tag tag-city">Mirandela</span>
+        <span class="tag tag-city">Mirandela 🏠</span>
       </div>
     </div>
   </div>
@@ -924,7 +656,6 @@ a { text-decoration:none; color:inherit }
       <h2>Hotéis Recomendados</h2>
     </div>
 
-    <!-- ZARAGOZA -->
     <div class="hotel-location reveal">
       <div class="hotel-location-header">
         <div class="hotel-location-name">Zaragoza</div>
@@ -937,11 +668,7 @@ a { text-decoration:none; color:inherit }
             <div class="hotel-tier">★★★★ · Centro Histórico</div>
             <div class="hotel-name">Hotel Sauce</div>
             <p class="hotel-desc">A 50m da Basílica del Pilar. Quartos com pavimento em madeira, pequeno-almoço caseiro e estacionamento dedicado a motas a €6/noite — confirmado por bikers.</p>
-            <div class="hotel-chips">
-              <span class="chip green">🏍️ Mota €6/noite</span>
-              <span class="chip">WiFi</span>
-              <span class="chip">Centro</span>
-            </div>
+            <div class="hotel-chips"><span class="chip hi">🏍️ Mota €6/noite</span><span class="chip">WiFi</span><span class="chip">Centro</span></div>
             <div class="hotel-footer">
               <div class="hotel-price">~€80 <span>/ noite</span></div>
               <a href="https://www.booking.com/hotel/es/sauce.html" target="_blank" class="book-btn">Reservar</a>
@@ -949,16 +676,12 @@ a { text-decoration:none; color:inherit }
           </div>
         </div>
         <div class="hotel-card">
-          <div class="hotel-card-accent" style="background:var(--accent2)"></div>
+          <div class="hotel-card-accent" style="background:var(--amber)"></div>
           <div class="hotel-card-body">
             <div class="hotel-tier">★★★★★ · Opção Premium</div>
             <div class="hotel-name">NH Collection Gran Hotel</div>
-            <p class="hotel-desc">Hotel histórico com rating 9.2. Restaurante, spa e localização privilegiada no coração da cidade. Para quando queres tratar-te bem após 490km de estrada.</p>
-            <div class="hotel-chips">
-              <span class="chip green">Rating 9.2</span>
-              <span class="chip">Spa</span>
-              <span class="chip">Restaurante</span>
-            </div>
+            <p class="hotel-desc">Hotel histórico com rating 9.2. Restaurante, spa e localização privilegiada. Para quando queres tratar-te bem após 490km de estrada.</p>
+            <div class="hotel-chips"><span class="chip hi">Rating 9.2</span><span class="chip">Spa</span><span class="chip">Restaurante</span></div>
             <div class="hotel-footer">
               <div class="hotel-price">~€140 <span>/ noite</span></div>
               <a href="https://www.booking.com/hotel/es/nh-collection-gran-hotel-de-zaragoza.html" target="_blank" class="book-btn">Reservar</a>
@@ -968,7 +691,6 @@ a { text-decoration:none; color:inherit }
       </div>
     </div>
 
-    <!-- ANDORRA -->
     <div class="hotel-location reveal">
       <div class="hotel-location-header">
         <div class="hotel-location-name">Andorra la Vella</div>
@@ -980,12 +702,8 @@ a { text-decoration:none; color:inherit }
           <div class="hotel-card-body">
             <div class="hotel-tier">★★★★ · Central</div>
             <div class="hotel-name">Hotel Best Andorra Center</div>
-            <p class="hotel-desc">Piscina aquecida interior, ginásio e sauna. Estacionamento seguro para motas confirmado por bikers. Perto das lojas duty-free — ideal para reabastecer e descansar.</p>
-            <div class="hotel-chips">
-              <span class="chip green">🏍️ Mota Segura</span>
-              <span class="chip">Piscina</span>
-              <span class="chip">Spa</span>
-            </div>
+            <p class="hotel-desc">Piscina aquecida interior, ginásio e sauna. Estacionamento seguro para motas confirmado por bikers. Perto das lojas duty-free.</p>
+            <div class="hotel-chips"><span class="chip hi">🏍️ Mota Segura</span><span class="chip">Piscina</span><span class="chip">Spa</span></div>
             <div class="hotel-footer">
               <div class="hotel-price">~€95 <span>/ noite</span></div>
               <a href="https://www.booking.com/hotel/ad/best-andorra-center.html" target="_blank" class="book-btn">Reservar</a>
@@ -995,14 +713,10 @@ a { text-decoration:none; color:inherit }
         <div class="hotel-card">
           <div class="hotel-card-accent" style="background:var(--forest)"></div>
           <div class="hotel-card-body">
-            <div class="hotel-tier">★★★★ · Vistas de Montanha</div>
+            <div class="hotel-tier">★★★★ · Vistas Pirenéus</div>
             <div class="hotel-name">Andorra Park Hotel</div>
-            <p class="hotel-desc">Quartos espaçosos com varandas sobre os Pirenéus, piscina exterior sazonal e ginásio. Pequeno-almoço buffet muito bem avaliado pelos hóspedes.</p>
-            <div class="hotel-chips">
-              <span class="chip green">Vistas Pirenéus</span>
-              <span class="chip">Piscina</span>
-              <span class="chip">Estacionamento</span>
-            </div>
+            <p class="hotel-desc">Quartos espaçosos com varandas sobre os Pirenéus, piscina exterior sazonal. Pequeno-almoço buffet muito bem avaliado.</p>
+            <div class="hotel-chips"><span class="chip hi">Vistas Pirenéus</span><span class="chip">Piscina</span><span class="chip">Estacionamento</span></div>
             <div class="hotel-footer">
               <div class="hotel-price">~€120 <span>/ noite</span></div>
               <a href="https://www.booking.com/hotel/ad/andorra-park.html" target="_blank" class="book-btn">Reservar</a>
@@ -1012,7 +726,6 @@ a { text-decoration:none; color:inherit }
       </div>
     </div>
 
-    <!-- PAMPLONA -->
     <div class="hotel-location reveal">
       <div class="hotel-location-header">
         <div class="hotel-location-name">Pamplona</div>
@@ -1024,12 +737,8 @@ a { text-decoration:none; color:inherit }
           <div class="hotel-card-body">
             <div class="hotel-tier">★★★★ · Favorito de Bikers</div>
             <div class="hotel-name">Alma Hotel · Muga de Beloso</div>
-            <p class="hotel-desc">Estacionamento subterrâneo seguro, piscina e ginásio. Muito recomendado pela comunidade de motociclistas. Boa localização com acesso fácil à cidade velha.</p>
-            <div class="hotel-chips">
-              <span class="chip green">🏍️ Favorito Bikers</span>
-              <span class="chip">Subterrâneo</span>
-              <span class="chip">Piscina</span>
-            </div>
+            <p class="hotel-desc">Estacionamento subterrâneo seguro, piscina e ginásio. Muito recomendado pela comunidade de motociclistas europeus.</p>
+            <div class="hotel-chips"><span class="chip hi">🏍️ Favorito Bikers</span><span class="chip">Subterrâneo</span><span class="chip">Piscina</span></div>
             <div class="hotel-footer">
               <div class="hotel-price">~€85 <span>/ noite</span></div>
               <a href="https://www.booking.com/hotel/es/alma-pamplona.html" target="_blank" class="book-btn">Reservar</a>
@@ -1041,12 +750,8 @@ a { text-decoration:none; color:inherit }
           <div class="hotel-card-body">
             <div class="hotel-tier">★★★★ · Cidade Velha</div>
             <div class="hotel-name">Pamplona Catedral Hotel</div>
-            <p class="hotel-desc">No coração do casco antigo, a poucos passos da Catedral e da Plaza del Castillo. Estacionamento privado, terraço e fitness center.</p>
-            <div class="hotel-chips">
-              <span class="chip green">Centro Histórico</span>
-              <span class="chip">Estac. Privado</span>
-              <span class="chip">Terraço</span>
-            </div>
+            <p class="hotel-desc">No coração do casco antigo, a poucos passos da Catedral e da Plaza del Castillo. Estacionamento privado e terraço.</p>
+            <div class="hotel-chips"><span class="chip hi">Centro Histórico</span><span class="chip">Estac. Privado</span><span class="chip">Terraço</span></div>
             <div class="hotel-footer">
               <div class="hotel-price">~€100 <span>/ noite</span></div>
               <a href="https://www.booking.com/hotel/es/pamplona-catedral.html" target="_blank" class="book-btn">Reservar</a>
@@ -1056,7 +761,6 @@ a { text-decoration:none; color:inherit }
       </div>
     </div>
 
-    <!-- SANTANDER / PICOS -->
     <div class="hotel-location reveal">
       <div class="hotel-location-header">
         <div class="hotel-location-name">Santander / Picos de Europa</div>
@@ -1068,12 +772,8 @@ a { text-decoration:none; color:inherit }
           <div class="hotel-card-body">
             <div class="hotel-tier">★★★★★ · Experiência Única</div>
             <div class="hotel-name">Parador de Fuente Dé</div>
-            <p class="hotel-desc">No coração dos Picos de Europa, com vistas épicas para os picos calcários. Cozinha asturiana de nível. A experiência definitiva após o dia mais dramático da rota.</p>
-            <div class="hotel-chips">
-              <span class="chip green">Picos de Europa</span>
-              <span class="chip">Vistas Épicas</span>
-              <span class="chip">Restaurante</span>
-            </div>
+            <p class="hotel-desc">No coração dos Picos de Europa, com vistas épicas para os picos calcários. Cozinha asturiana de referência. A experiência definitiva desta rota.</p>
+            <div class="hotel-chips"><span class="chip hi">Picos de Europa</span><span class="chip">Vistas Épicas</span><span class="chip">Restaurante</span></div>
             <div class="hotel-footer">
               <div class="hotel-price">~€110 <span>/ noite</span></div>
               <a href="https://www.booking.com/hotel/es/parador-de-fuente-de.html" target="_blank" class="book-btn">Reservar</a>
@@ -1085,12 +785,8 @@ a { text-decoration:none; color:inherit }
           <div class="hotel-card-body">
             <div class="hotel-tier">★★★ · Junto ao Mar</div>
             <div class="hotel-name">Hotel Abba Santander</div>
-            <p class="hotel-desc">Central em Santander junto à baía cantábrica. Estacionamento, quartos modernos e bom buffet de pequeno-almoço. Boa base para o último dia de regresso.</p>
-            <div class="hotel-chips">
-              <span class="chip green">Baía Cantábrica</span>
-              <span class="chip">Estacionamento</span>
-              <span class="chip">Buffet</span>
-            </div>
+            <p class="hotel-desc">Central em Santander junto à baía cantábrica. Estacionamento, quartos modernos e bom buffet. Boa base para o último dia de regresso.</p>
+            <div class="hotel-chips"><span class="chip hi">Baía Cantábrica</span><span class="chip">Estacionamento</span><span class="chip">Buffet</span></div>
             <div class="hotel-footer">
               <div class="hotel-price">~€75 <span>/ noite</span></div>
               <a href="https://www.booking.com/hotel/es/abba-santander.html" target="_blank" class="book-btn">Reservar</a>
@@ -1111,48 +807,18 @@ a { text-decoration:none; color:inherit }
       <h2>Estimativa de Custos</h2>
     </div>
     <div class="costs-grid reveal">
-      <div class="cost-card">
-        <div class="cost-emoji">🏨</div>
-        <div class="cost-cat">Hotéis · 4 Noites</div>
-        <div class="cost-val">~€360</div>
-        <div class="cost-note">€90/noite em média · opções de 3 a 5 estrelas</div>
-      </div>
-      <div class="cost-card">
-        <div class="cost-emoji">⛽</div>
-        <div class="cost-cat">Combustível</div>
-        <div class="cost-val">~€155</div>
-        <div class="cost-note">1.850km · ~6.5L/100km · €1.45/L médio</div>
-      </div>
-      <div class="cost-card">
-        <div class="cost-emoji">🍽️</div>
-        <div class="cost-cat">Alimentação</div>
-        <div class="cost-val">~€200</div>
-        <div class="cost-note">€40/dia incluindo refeições e cafés de estrada</div>
-      </div>
-      <div class="cost-card">
-        <div class="cost-emoji">🛣️</div>
-        <div class="cost-cat">Portagens</div>
-        <div class="cost-val">~€45</div>
-        <div class="cost-note">Autoestradas Espanha e Portugal</div>
-      </div>
-      <div class="cost-card">
-        <div class="cost-emoji">☕</div>
-        <div class="cost-cat">Cafés e Paragens</div>
-        <div class="cost-val">~€50</div>
-        <div class="cost-note">Paragens ao longo dos 5 dias</div>
-      </div>
-      <div class="cost-card">
-        <div class="cost-emoji">🎲</div>
-        <div class="cost-cat">Buffer / Extras</div>
-        <div class="cost-val">~€50</div>
-        <div class="cost-note">Imprevistos, visitas, compras</div>
-      </div>
+      <div class="cost-card"><div class="cost-emoji">🏨</div><div class="cost-cat">Hotéis · 4 Noites</div><div class="cost-val">~€360</div><div class="cost-note">€90/noite em média · opções 3★ a 5★</div></div>
+      <div class="cost-card"><div class="cost-emoji">⛽</div><div class="cost-cat">Combustível</div><div class="cost-val">~€155</div><div class="cost-note">1.850km · ~6.5L/100km · €1.45/L médio</div></div>
+      <div class="cost-card"><div class="cost-emoji">🍽️</div><div class="cost-cat">Alimentação</div><div class="cost-val">~€200</div><div class="cost-note">€40/dia incluindo refeições e cafés</div></div>
+      <div class="cost-card"><div class="cost-emoji">🛣️</div><div class="cost-cat">Portagens</div><div class="cost-val">~€45</div><div class="cost-note">Autoestradas Espanha e Portugal</div></div>
+      <div class="cost-card"><div class="cost-emoji">☕</div><div class="cost-cat">Cafés e Paragens</div><div class="cost-val">~€50</div><div class="cost-note">Paragens ao longo dos 5 dias</div></div>
+      <div class="cost-card"><div class="cost-emoji">🎲</div><div class="cost-cat">Buffer / Extras</div><div class="cost-val">~€50</div><div class="cost-note">Imprevistos, visitas, compras</div></div>
     </div>
     <div class="cost-total reveal">
       <div class="cost-total-label">Total Estimado · Rota Circular · 1 Pessoa</div>
       <div class="cost-total-val">~€860</div>
     </div>
-    <p class="cost-note-global reveal">* Combustível calculado para consumo médio de mota grande (~6.5L/100km). Preços de hotel com base nas opções listadas acima. Poupas até €80 escolhendo sempre a opção mais económica. Andorra tem combustível ~20% mais barato — enche o depósito antes de sair para França. Valores de 2025, sujeitos a alteração.</p>
+    <p class="cost-disclaimer reveal">* Combustível calculado para consumo médio de mota grande (~6.5L/100km). Andorra tem combustível ~20% mais barato — enche o depósito antes de sair para França. Poupas até €80 escolhendo sempre a opção mais económica. Valores de 2025, sujeitos a alteração.</p>
   </div>
 </section>
 
@@ -1164,49 +830,85 @@ a { text-decoration:none; color:inherit }
       <h2>Dicas Essenciais</h2>
     </div>
     <div class="tips-grid">
-      <div class="tip-card reveal">
-        <div class="tip-icon">⛽</div>
-        <div class="tip-title">Combustível em Andorra</div>
-        <p class="tip-text">Andorra não aplica IVA na gasolina. O combustível é cerca de 20% mais barato do que em Espanha ou França. Enche o depósito ao máximo antes de cruzar para o lado francês — é a paragem mais rentável da viagem.</p>
-      </div>
-      <div class="tip-card reveal">
-        <div class="tip-icon">🌡️</div>
-        <div class="tip-title">Temperatura nos Portos</div>
-        <p class="tip-text">Acima dos 2.000m pode fazer muito frio mesmo no verão. A diferença entre o vale e o cume do Tourmalet pode atingir 15°C. Leva sempre uma camada intermédia na bagagem — vale o peso.</p>
-      </div>
-      <div class="tip-card reveal">
-        <div class="tip-icon">📅</div>
-        <div class="tip-title">Melhor Época</div>
-        <p class="tip-text">Maio, Junho e Setembro são os meses ideais. Julho e Agosto têm muito turismo nos portos de montanha. Evita Outubro e Novembro — os passes podem estar encerrados por neve sem aviso prévio.</p>
-      </div>
-      <div class="tip-card reveal">
-        <div class="tip-icon">🛣️</div>
-        <div class="tip-title">Portagens em Espanha</div>
-        <p class="tip-text">Algumas autoestradas espanholas têm portagem. Leva €30 em moedas ou cartão. As estradas nacionais são gratuitas e frequentemente mais interessantes — não tenhas pressa de apanhar a autoestrada.</p>
-      </div>
-      <div class="tip-card reveal">
-        <div class="tip-icon">📸</div>
-        <div class="tip-title">Dia 3 — Não Tenhas Pressa</div>
-        <p class="tip-text">O trajeto Andorra → Tourmalet → Aubisque → Pamplona tem apenas 280km, mas são quilómetros que se percorrem devagar. Vai parar frequentemente. Não marques nada para a noite — deixa o dia fluir.</p>
-      </div>
-      <div class="tip-card reveal">
-        <div class="tip-icon">🏔️</div>
-        <div class="tip-title">Picos de Europa — Não Percas</div>
-        <p class="tip-text">A estrada até Fuente Dé é de uma beleza inesperada para quem vem dos Pirenéus. O desvio para o teleférico, se o tempo estiver favorável, oferece vistas sobre os picos de calcário que compensam qualquer desvio.</p>
-      </div>
+      <div class="tip-card reveal"><div class="tip-icon">⛽</div><div class="tip-title">Combustível em Andorra</div><p class="tip-text">Andorra não aplica IVA na gasolina — o combustível é cerca de 20% mais barato do que em Espanha ou França. Enche ao máximo antes de cruzar para o lado francês.</p></div>
+      <div class="tip-card reveal"><div class="tip-icon">🌡️</div><div class="tip-title">Temperatura nos Portos</div><p class="tip-text">Acima dos 2.000m pode fazer muito frio mesmo no verão. A diferença entre o vale e o cume do Tourmalet pode atingir 15°C. Leva sempre uma camada intermédia na bagagem.</p></div>
+      <div class="tip-card reveal"><div class="tip-icon">📅</div><div class="tip-title">Melhor Época</div><p class="tip-text">Maio, Junho e Setembro são os meses ideais. Julho e Agosto têm muito turismo nos portos. Evita Outubro e Novembro — os passes podem estar encerrados por neve.</p></div>
+      <div class="tip-card reveal"><div class="tip-icon">🛣️</div><div class="tip-title">Portagens em Espanha</div><p class="tip-text">Algumas autoestradas têm portagem. Leva €30 em moedas ou cartão. As estradas nacionais são gratuitas e frequentemente mais interessantes — não tenhas pressa.</p></div>
+      <div class="tip-card reveal"><div class="tip-icon">📸</div><div class="tip-title">Dia 3 — Não Tenhas Pressa</div><p class="tip-text">O trajeto Andorra → Tourmalet → Aubisque → Pamplona tem apenas 280km mas são quilómetros que se percorrem devagar. Vai parar frequentemente. Não marques nada para a noite.</p></div>
+      <div class="tip-card reveal"><div class="tip-icon">🏔️</div><div class="tip-title">Picos de Europa</div><p class="tip-text">A estrada até Fuente Dé é de uma beleza inesperada. O desvio para o teleférico, se o tempo estiver favorável, oferece vistas sobre os picos calcários que compensam qualquer desvio.</p></div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="footer">
+<footer>
   <div class="footer-inner">
     <div class="footer-brand">Mirandela aos Pirenéus, e Volta</div>
-    <div class="footer-route">~1.850 km · 5 Dias · Portugal → Espanha → Andorra → França → Espanha → Portugal</div>
+    <div class="footer-note">~1.850 km · 5 Dias · Portugal → Espanha → Andorra → França → Espanha → Portugal</div>
   </div>
 </footer>
 
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+// ── MAP ─────────────────────────────────────────
+const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([42.2, -2.0], 6);
+
+// CartoDB dark tiles — no API key needed
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter_lite/{z}/{x}/{y}{r}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+  maxZoom: 18
+}).addTo(map);
+
+// Waypoints
+const stops = [
+  { latlng: [41.4853, -7.1808], label: 'Mirandela', day: 'Partida',    color: '#A0522D' },
+  { latlng: [41.6474, -0.8861], label: 'Zaragoza',  day: 'Noite 1',   color: '#D4843A' },
+  { latlng: [42.5717, -0.5470], label: 'Jaca',      day: 'Paragem',   color: '#D4843A' },
+  { latlng: [42.5063,  1.5218], label: 'Andorra',   day: 'Noite 2',   color: '#5B7FA6' },
+  { latlng: [42.9081,  0.1452], label: 'Tourmalet', day: '2.115m',    color: '#5B7FA6' },
+  { latlng: [42.9765, -0.3396], label: 'Aubisque',  day: '1.709m',    color: '#5B7FA6' },
+  { latlng: [42.8125, -1.6457], label: 'Pamplona',  day: 'Noite 3',   color: '#3A5C3A' },
+  { latlng: [43.175,  -4.850],  label: 'Picos de Europa', day: 'Desvio', color: '#3A5C3A' },
+  { latlng: [43.4628, -3.8052], label: 'Santander', day: 'Noite 4',   color: '#3A5C3A' },
+  { latlng: [41.4853, -7.1808], label: 'Mirandela', day: 'Chegada',   color: '#A0522D' },
+];
+
+// Draw route line
+const latlngs = stops.map(s => s.latlng);
+L.polyline(latlngs, {
+  color: '#D4843A',
+  weight: 2.5,
+  opacity: 0.75,
+  dashArray: '6, 4'
+}).addTo(map);
+
+// Custom marker style
+stops.forEach((stop, i) => {
+  if (i === stops.length - 1) return; // skip duplicate Mirandela end
+  const icon = L.divIcon({
+    className: '',
+    html: `<div style="
+      width:10px;height:10px;
+      background:${stop.color};
+      border:2px solid #FAF6EF;
+      border-radius:50%;
+      box-shadow:0 0 0 2px ${stop.color}40;
+    "></div>`,
+    iconSize: [10, 10],
+    iconAnchor: [5, 5]
+  });
+  L.marker(stop.latlng, { icon })
+    .addTo(map)
+    .bindPopup(`
+      <div style="font-family:'Jost',sans-serif;font-size:0.82rem;color:#2C2318;min-width:120px;line-height:1.5">
+        <strong style="font-family:'Cormorant Garamond',serif;font-size:1rem">${stop.label}</strong><br>
+        <span style="color:#9A8E80;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase">${stop.day}</span>
+      </div>
+    `, { className: 'custom-popup' });
+});
+
+// ── SCROLL REVEAL ────────────────────────────────
 const io = new IntersectionObserver(entries => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
@@ -1217,5 +919,20 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
+
+<style>
+/* Leaflet popup style */
+.leaflet-popup-content-wrapper {
+  border-radius: 2px !important;
+  box-shadow: 0 4px 20px rgba(44,35,24,0.15) !important;
+  border: 1px solid rgba(44,35,24,0.1) !important;
+}
+.leaflet-popup-tip { background: white !important }
+.leaflet-control-zoom a {
+  background: rgba(40,30,18,0.9) !important;
+  color: var(--sand) !important;
+  border-color: rgba(200,184,154,0.15) !important;
+}
+</style>
 </body>
 </html>
